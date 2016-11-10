@@ -105,19 +105,23 @@ public class PairApiTest {
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
-        BluetoothDevice device = mock(BluetoothDevice.class);
-        sendPairingFailed(device, MAC_ADDRESS_1);
+        sendPairingFailed(mock(BluetoothDevice.class), MAC_ADDRESS_1);
+        subscriber.awaitTerminalEvent();
         subscriber.assertNoValues();
         subscriber.assertError(DevicePairingFailed.class);
     }
 
-//    @Test
-//    public void cancelCurrentPairOperation() throws Exception {
-//        /**
-//         * TODO: Ao cancelar precisamos ter certeza de que outros eventos não irão ocorrer
-//         **/
-//        fail("Not yet implemented!");
-//    }
+    @Test
+    public void cancelPairOperationSameAsTimeout() throws Exception {
+        PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
+        Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
+        TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
+        observable.subscribe(subscriber);
+        sendTimeout(mock(BluetoothDevice.class), MAC_ADDRESS_1);
+        subscriber.awaitTerminalEvent();
+        subscriber.assertNoValues();
+        subscriber.assertError(DevicePairingTimeout.class);
+    }
 
     // TODO: Multiplas tentativas
     // TODO: Timeout (Talvez não seja aqui)
@@ -137,23 +141,27 @@ public class PairApiTest {
      * startActivityForResult(pairingIntent, REQUEST_BT_PAIRING);
      */
     private void sendDeviceBounded(BluetoothDevice device, String name, String macAddress) {
-        sendDeviceStateChanged(device, name, macAddress, BOND_BONDED, ACTION_BOND_STATE_CHANGED);
+        sendBroadcastMessage(device, name, macAddress, BOND_BONDED, ACTION_BOND_STATE_CHANGED);
     }
 
     private void sendDeviceNoState(BluetoothDevice device, String name, String macAddress) {
-        sendDeviceStateChanged(device, name, macAddress, -1, ACTION_BOND_STATE_CHANGED);
+        sendBroadcastMessage(device, name, macAddress, -1, ACTION_BOND_STATE_CHANGED);
     }
 
     private void sendDeviceNotBounded(BluetoothDevice device, String name, String macAddress) {
-        sendDeviceStateChanged(device, name, macAddress, BOND_NONE, ACTION_BOND_STATE_CHANGED);
+        sendBroadcastMessage(device, name, macAddress, BOND_NONE, ACTION_BOND_STATE_CHANGED);
     }
 
     private void sendPairingFailed(BluetoothDevice device, String macAddress) {
-        sendDeviceStateChanged(device, "", macAddress, -1, PairApi.ACTION_PAIRING_FAILED);
+        sendBroadcastMessage(device, "", macAddress, -1, PairApi.ACTION_PAIRING_FAILED);
     }
 
-    private void sendDeviceStateChanged(BluetoothDevice device, String name, String macAddress,
-                                        int state, String action) {
+    private void sendTimeout(BluetoothDevice device, String macAddress) {
+        sendBroadcastMessage(device, "", macAddress, -1, PairApi.ACTION_PAIRING_TIMEOUT);
+    }
+
+    private void sendBroadcastMessage(BluetoothDevice device, String name, String macAddress,
+                                      int state, String action) {
         Intent intent = new Intent(action);
         doReturn(macAddress).when(device).getAddress();
         intent.putExtra(BluetoothDevice.EXTRA_DEVICE, device);

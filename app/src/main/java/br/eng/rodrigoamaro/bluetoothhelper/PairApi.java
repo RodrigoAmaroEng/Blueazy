@@ -24,7 +24,7 @@ public class PairApi {
     private static final String TAG = "PairApi";
     private static final String FAKE_ACTION_PAIR_REQUEST = "android.bluetooth.device.action.PAIRING_REQUEST";
     public static final String ACTION_PAIRING_SUCCEEDED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_SUCCEEDED";
-    public static final String ACTION_PAIRING = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING";
+    public static final String ACTION_PAIRING_TIMEOUT = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_TIMEOUT";
     public static final String ACTION_PAIRING_FAILED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_FAILED";
     public static final String ACTION_PAIRING_NOT_DONE = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_NOT_DONE";
     private final Context mContext;
@@ -43,6 +43,7 @@ public class PairApi {
         intentFilter.addAction(ACTION_ACL_DISCONNECTED);
         intentFilter.addAction(FAKE_ACTION_PAIR_REQUEST);
         intentFilter.addAction(ACTION_PAIRING_FAILED);
+        intentFilter.addAction(ACTION_PAIRING_TIMEOUT);
 
         // The method getRemoteDevice will always return a Device even if it doesn't exists
         // https://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html#getRemoteDevice
@@ -62,6 +63,8 @@ public class PairApi {
                 if (macAddress.equals(device.getAddress())) {
                     if (ACTION_PAIRING_FAILED.equals(action)) {
                         return Observable.error(new DevicePairingFailed());
+                    } else if (ACTION_PAIRING_TIMEOUT.equals(action)) {
+                        return Observable.error(new DevicePairingTimeout());
                     }
                 }
                 return Observable.just(intent);
