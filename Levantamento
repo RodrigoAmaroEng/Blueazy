@@ -1,0 +1,669 @@
+RealPairTest|PairApi|PairingSystem|System.err
+
+##############################################################################################################################
+
+LG L5 II Com D180 
+
+Método CreateBond
+
+Pediu pra parear e não informou o pin
+11-10 10:26:38.089 2372-2386 PairingSystem: Pair call succeeded
+11-10 10:26:40.029 2372-2372 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: No information
+11-10 10:26:40.301 2372-2372 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 10:27:06.613 2372-2372 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 10:27:06.722 2372-2372 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+Pediu pra parear e cancelou
+11-10 11:20:26.996 3359-3373 PairingSystem: Pair call succeeded
+11-10 11:20:27.388 3359-3359 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:20:27.619 3359-3359 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:20:30.002 3359-3359 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:20:30.121 3359-3359 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+Pediu pra parear e informou o pin errado
+11-10 11:20:49.748 3426-3440 PairingSystem: Pair call succeeded
+11-10 11:20:52.058 3426-3426 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:20:52.288 3426-3426 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:20:55.806 3426-3426 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:20:55.883 3426-3426 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+Pediu pra parear e informou o pin certo
+11-10 11:21:43.078 3566-3580 PairingSystem: Pair call succeeded
+11-10 11:21:44.655 3566-3566 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:21:44.987 3566-3566 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:21:50.582 3566-3566 PairApi: Action: BOND_STATE_CHANGED Bond State: 12 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:21:50.589 3566-3566/? D/RealPairTest: Pair completed
+
+##############################################################################################################################
+
+Método RfCommSerial
+DeviceClass: 1024 - 1028
+Id: 00001101-0000-1000-8000-00805f9b34fb
+Id: 00001101-0000-1000-8000-00805f9b34fb
+Id: 00000001-0000-1000-8000-00805f9b34fb
+
+Pediu pra parear e não informou o pin
+01-01 00:21:35.400 3453-3479 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
+01-01 00:21:35.405 3453-3479 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:436)
+01-01 00:21:35.405 3453-3479 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:51)
+01-01 00:21:35.406 3453-3479 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:25)
+01-01 00:21:35.406 3453-3479 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairApi.pair(PairApi.java:42)
+
+Pediu pra parear e cancelou
+01-01 00:25:15.436 3864-3878 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
+01-01 00:25:15.437 3864-3878 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:436)
+01-01 00:25:15.438 3864-3878 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:51)
+01-01 00:25:15.438 3864-3878 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:25)
+01-01 00:25:15.439 3864-3878 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairApi.pair(PairApi.java:42)
+
+Pediu pra parear e informou o pin errado
+01-01 00:26:54.986 3989-4003 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
+01-01 00:26:54.997 3989-4003 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:436)
+01-01 00:26:54.998 3989-4003 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:51)
+01-01 00:26:55.000 3989-4003 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:25)
+01-01 00:26:55.002 3989-4003 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairApi.pair(PairApi.java:42)
+
+Pediu pra parear e informou o pin certo
+NÃO MOSTROU NADA MAS APARENTEMENTE DEU SUCESSO
+
+Pediu pra parear um leitor já pareado
+NÃO MOSTROU NADA
+
+##############################################################################################################################
+
+LG L5 II Com D200 
+DeviceClass: 7936 - 7936
+Id: Null
+
+Método CreateBond
+
+Pediu pra parear e não informou o pin
+11-09 14:23:04.890 12097-12097 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 14:23:29.720 12097-12097 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB
+
+Pediu pra parear e cancelou
+11-09 14:25:02.711 12291-12291 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 14:25:05.717 12291-12291 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e informou o pin errado
+11-09 14:25:52.602 12361-12361 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 14:25:57.003 12361-12361 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e informou o pin certo
+11-09 14:27:23.023 12453-12453 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 14:27:32.005 12453-12453 PairApi: Bond State: 12 MacAddress: 00:07:80:7A:C6:CB 
+11-09 14:27:32.015 12453-12453 RealPairTest: Pair completed
+
+Pediu pra parear um leitor já pareado
+NÃO MOSTROU NADA
+
+##############################################################################################################################
+
+Método RfCommSerial
+DeviceClass: 7936 - 7936
+Id: 00001101-0000-1000-8000-00805f9b34fb
+Id: 00001101-0000-1000-8000-00805f9b34fb
+
+Pediu pra parear e não informou o pin (Mostrou a dialog)
+11-09 14:31:26.958 12997-13011 System.err: java.io.IOException: Service discovery failed
+11-09 14:31:26.962 12997-13011 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:990)
+11-09 14:31:26.964 12997-13011 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:423)
+11-09 14:31:26.964 12997-13011 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:31:50.934 12997-12997 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e cancelou
+11-09 14:34:56.423 13073-13087 System.err: java.io.IOException: Service discovery failed
+11-09 14:34:56.424 13073-13087 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:990)
+11-09 14:34:56.424 13073-13087 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:423)
+11-09 14:34:56.424 13073-13087 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:34:57.014 13073-13073 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e informou o pin errado
+11-09 14:36:55.500 13153-13167 System.err: java.io.IOException: Service discovery failed
+11-09 14:36:55.502 13153-13167 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:990)
+11-09 14:36:55.502 13153-13167 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:423)
+11-09 14:36:55.502 13153-13167 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:41:11.963 13242-13242 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB (2nd Try)
+
+Pediu pra parear e informou o pin certo (Não deu certo)
+11-09 14:42:08.854 13321-13335 System.err: java.io.IOException: Service discovery failed
+11-09 14:42:08.856 13321-13335 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:990)
+11-09 14:42:08.857 13321-13335 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:423)
+11-09 14:42:08.857 13321-13335 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:42:13.157 13321-13321 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 14:42:14.096 13321-13321 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB
+11-09 14:42:14.099 13321-13321 PairApi: Id: 00001101-0000-1000-8000-00805f9b34fb
+11-09 14:42:14.099 13321-13321 PairApi: Id: 00001101-0000-1000-8000-00805f9b34fb
+
+Pediu pra parear um leitor já pareado
+NÃO MOSTROU NADA
+
+##############################################################################################################################
+
+LG L5 II Com MP10
+
+Método CreateBond
+OBS: As vezes demora para aparecer a tela de pin
+
+Pediu pra parear e não informou o pin
+11-10 11:22:40.616 3753-3767 PairingSystem: Pair call succeeded
+11-10 11:22:41.461 3753-3753 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: No information
+11-10 11:22:41.987 3753-3753 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 11:23:06.497 3753-3753 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 11:23:06.565 3753-3753 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+
+Pediu pra parear e cancelou
+11-10 11:23:38.374 4164-4178 PairingSystem: Pair call succeeded
+11-10 11:23:40.236 4164-4164 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 11:23:40.479 4164-4164 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 11:23:42.346 4164-4164 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 11:23:42.462 4164-4164 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+
+Pediu pra parear e informou o pin errado
+11-10 11:24:01.112 4235-4249 PairingSystem: Pair call succeeded
+11-10 11:24:01.927 4235-4235 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 11:24:02.190 4235-4235 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 11:24:05.860 4235-4235 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 11:24:05.940 4235-4235 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+
+Pediu pra parear e informou o pin certo
+11-10 11:25:03.939 4423-4437 PairingSystem: Pair call succeeded
+11-10 11:25:04.816 4423-4423 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 11:25:05.131 4423-4423 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 11:25:11.782 4423-4423 PairApi: Action: BOND_STATE_CHANGED Bond State: 12 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 11:25:11.783 4423-4423 RealPairTest: Pair completed
+
+##############################################################################################################################
+
+Método RfCommSerial
+DeviceClass: 7936 - 7936
+Id: 00001101-0000-1000-8000-00805f9b34fb
+Id: 00001101-0000-1000-8000-00805f9b34fb
+
+Pediu pra parear e não informou o pin (Mostrou a dialog e sumiu rapidamente)
+11-09 14:57:42.740 14442-14456 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
+11-09 14:57:42.752 14442-14456 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:436)
+11-09 14:57:42.752 14442-14456 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:57:42.752 14442-14456 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:26)
+
+Pediu pra parear e cancelou
+11-09 14:59:45.246 14507-14521 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
+11-09 14:59:45.248 14507-14521 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:436)
+11-09 14:59:45.248 14507-14521 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:59:45.249 14507-14521 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:26)
+
+Pediu pra parear e informou o pin errado
+NÃO FOI POSSIVEL PORQUE A TELA SOME
+
+Pediu pra parear e informou o pin certo (Não deu certo)
+NÃO FOI POSSIVEL PORQUE A TELA SOME
+
+Pediu pra parear um leitor já pareado
+11-09 14:53:55.954 14119-14146 System.err: java.io.IOException: Service discovery failed
+11-09 14:53:55.959 14119-14146 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:990)
+11-09 14:53:55.959 14119-14146 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:423)
+11-09 14:53:55.959 14119-14146 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+
+##############################################################################################################################
+
+RAZR D1 Com MP10
+
+Método CreateBond
+
+Pediu pra parear e não informou o pin (Solicitação de pareamento ficou em background)
+11-10 09:10:16.152 2299-2299 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: No information
+11-10 09:10:16.342 2299-2299 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 09:11:16.136 2299-2299 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 09:11:16.271 2299-2299 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+
+
+Pediu pra parear e cancelou
+11-10 09:14:18.184 2435-2435 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 09:14:18.437 2435-2435 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 09:14:22.720 2435-2435 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 09:14:22.895 2435-2435 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+
+Pediu pra parear e informou o pin errado
+11-10 09:15:12.198 2520-2533 PairingSystem: Pair call succeeded
+11-10 09:15:12.986 2520-2520 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 09:15:14.821 2520-2520 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 09:15:33.145 2520-2520 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 09:15:33.281 2520-2520 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+
+
+Pediu pra parear e informou o pin certo
+11-10 09:18:47.444 3228-3241 PairingSystem: Pair call succeeded
+11-10 09:18:48.131 3228-3228 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 09:18:48.824 3228-3228 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 09:18:57.111 3228-3228 PairApi: Action: BOND_STATE_CHANGED Bond State: 12 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 7936 - 7936
+11-10 09:18:57.114 3228-3228 RealPairTest: Pair completed
+
+Pediu pra parear um leitor já pareado
+NÃO MOSTROU NADA
+
+##############################################################################################################################
+
+Método RfCommSerial
+DeviceClass: 7936 - 7936
+
+
+Pediu pra parear e não informou o pin (Mostrou a dialog e sumiu rapidamente)
+11-09 15:23:28.024 7762-7775 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
+11-09 15:23:28.025 7762-7775 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:395)
+11-09 15:23:28.026 7762-7775 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+
+Pediu pra parear e cancelou
+11-09 15:25:38.936 7957-7970 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
+11-09 15:25:38.937 7957-7970 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:395)
+11-09 15:25:38.937 7957-7970 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+
+Pediu pra parear e informou o pin errado
+NÃO FOI POSSIVEL PORQUE A TELA SOME
+
+Pediu pra parear e informou o pin certo (Não deu certo)
+NÃO FOI POSSIVEL PORQUE A TELA SOME
+
+Pediu pra parear um leitor já pareado
+11-09 14:53:55.954 14119-14146 System.err: java.io.IOException: Service discovery failed
+11-09 14:53:55.959 14119-14146 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:990)
+11-09 14:53:55.959 14119-14146 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:423)
+11-09 14:53:55.959 14119-14146 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+
+##############################################################################################################################
+
+RAZR D1 Com D200
+DeviceClass: 0 - 0
+Id: Null
+
+Método CreateBond
+
+Pediu pra parear e não informou o pin 
+11-09 15:30:52.572 8155-8155 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 15:31:17.468 8155-8155 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e cancelou
+11-09 15:32:17.077 8244-8244 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 15:32:20.795 8244-8244 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e informou o pin errado
+11-09 15:32:47.821 8323-8323 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 15:32:50.742 8323-8323 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e informou o pin certo
+11-09 15:33:18.538 8413-8413 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 15:33:28.682 8413-8413 PairApi: Bond State: 12 MacAddress: 00:07:80:7A:C6:CB 
+11-09 15:33:28.692 8413-8413 RealPairTest: Pair completed
+
+Pediu pra parear um leitor já pareado
+NÃO MOSTROU NADA
+
+##############################################################################################################################
+
+Método RfCommSerial
+DeviceClass: 0 - 0
+Id: 00001101-0000-1000-8000-00805f9b34fb
+Id: 00001101-0000-1000-8000-00805f9b34fb
+
+
+Pediu pra parear e não informou o pin 
+11-09 15:37:24.012 8804-8817 System.err: java.io.IOException: Service discovery failed
+11-09 15:37:24.013 8804-8817 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:813)
+11-09 15:37:24.013 8804-8817 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:382)
+11-09 15:37:24.013 8804-8817 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 15:37:46.705 8804-8804 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e cancelou
+11-09 15:38:50.106 8891-8904 System.err: java.io.IOException: Service discovery failed
+11-09 15:38:50.107 8891-8904 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:813)
+11-09 15:38:50.107 8891-8904 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:382)
+11-09 15:38:50.107 8891-8904 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 15:38:54.108 8891-8891 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB
+
+Pediu pra parear e informou o pin errado
+11-09 15:42:50.138 9013-9026 System.err: java.io.IOException: Service discovery failed
+11-09 15:42:50.139 9013-9026 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:813)
+11-09 15:42:50.140 9013-9026 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:382)
+11-09 15:42:50.140 9013-9026 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 15:42:54.587 9013-9013 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB
+
+Pediu pra parear e informou o pin certo (Não deu certo)
+11-09 15:44:12.811 9106-9119 System.err: java.io.IOException: Service discovery failed
+11-09 15:44:12.814 9106-9119 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:813)
+11-09 15:44:12.814 9106-9119 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:382)
+11-09 15:44:12.814 9106-9119 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 15:44:19.999 9106-9106 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 15:44:20.848 9106-9106 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear um leitor já pareado
+NÃO FOI POSSIVEL
+
+##############################################################################################################################
+
+RAZR D1 Com D180
+
+Método CreateBond
+OBS: Pode não exibir a dialog
+
+Pediu pra parear e não informou o pin 
+11-10 09:21:44.444 3506-3519 PairingSystem: Pair call succeeded
+11-10 09:21:45.688 3506-3506 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 09:21:45.939 3506-3506 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 09:22:43.272 3506-3506 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 09:22:43.280 3506-3506 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+
+Pediu pra parear e cancelou
+11-10 09:23:42.418 3612-3625 PairingSystem: Pair call succeeded
+11-10 09:23:43.738 3612-3612 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 09:23:44.120 3612-3612 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 09:23:45.607 3612-3612 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 09:23:45.777 3612-3612 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+Pediu pra parear e informou o pin errado
+11-10 09:27:40.699 3938-3951 PairingSystem: Pair call succeeded
+11-10 09:27:41.559 3938-3938 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 09:27:43.858 3938-3938 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 09:27:50.557 3938-3938 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 09:27:50.627 3938-3938 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+
+Pediu pra parear e informou o pin certo
+11-10 09:28:52.736 4033-4046 PairingSystem: Pair call succeeded
+11-10 09:28:53.453 4033-4033 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 09:28:53.716 4033-4033 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 09:29:06.703 4033-4033 PairApi: Action: BOND_STATE_CHANGED Bond State: 12 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 09:29:06.721 4033-4033 RealPairTest: Pair completed
+
+##############################################################################################################################
+
+NEXUS 5 Com D180
+DeviceClass: 7936 - 7936
+Id: 00001101-0000-1000-8000-00805f9b34fb
+Id: 00000000-0000-1000-8000-00805f9b34fb
+Id: ffcacade-afde-cade-defa-cade00000000
+
+Método CreateBond
+
+Pediu pra parear e não informou o pin 
+11-09 15:56:29.567 28522-28522 PairApi: Bond State: 11 MacAddress: 8C:DE:52:C1:F0:13 
+11-09 15:56:29.906 28522-28522 PairApi: Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 
+11-09 15:57:04.951 28522-28522 PairApi: Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 
+
+Pediu pra parear e cancelou
+11-09 15:58:58.626 29666-29666 PairApi: Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 
+11-09 15:59:00.410 29666-29666 PairApi: Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 
+
+Pediu pra parear e informou o pin errado
+11-09 16:00:09.387 30209-30209 PairApi: Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 
+
+Pediu pra parear e informou o pin certo
+11-09 16:01:03.271 30749-30749 PairApi: Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 
+11-09 16:01:08.713 30749-30749 PairApi: Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 
+11-09 16:01:10.353 30749-30749 PairApi: Bond State: 12 MacAddress: 8C:DE:52:C1:F0:13
+11-09 16:01:10.362 30749-30749 RealPairTest: Pair completed 
+
+Pediu pra parear um leitor já pareado
+NÃO MOSTROU NADA
+
+##############################################################################################################################
+
+NEXUS 5 Com D200
+DeviceClass: 7936 - 7936
+Id: 00001101-0000-1000-8000-00805f9b34fb
+Id: 00000000-0000-1000-8000-00805f9b34fb
+Id: ffcacade-afde-cade-defa-cade00000000
+
+Método CreateBond
+
+Pediu pra parear e não informou o pin 
+11-09 16:17:16.313 2042-2042 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 16:17:51.393 2042-2042 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e cancelou
+11-09 16:19:32.858 3908-3908/? D/PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB DeviceClass: 7936 - 7936
+11-09 16:19:36.602 3908-3908 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e informou o pin errado
+11-09 16:20:28.103 4391-4391 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e informou o pin certo
+11-09 16:21:07.663 4940-4940 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 16:21:18.436 4940-4940 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 16:21:19.292 4940-4940 PairApi: Bond State: 12 MacAddress: 00:07:80:7A:C6:CB 
+11-09 16:21:19.298 4940-4940 RealPairTest: Pair completed
+
+Pediu pra parear um leitor já pareado
+NÃO MOSTROU NADA
+
+##############################################################################################################################
+
+NEXUS 5 Com MP10
+DeviceClass: 7936 - 7936
+Id: 00001101-0000-1000-8000-00805f9b34fb
+Id: 00000000-0000-1000-8000-00805f9b34fb
+Id: ffcacade-afde-cade-defa-cade00000000
+
+Método CreateBond
+
+Pediu pra parear e não informou o pin 
+11-09 16:23:24.152 6429-6429 PairApi: Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 
+11-09 16:23:59.205 6429-6429 PairApi: Bond State: 10 MacAddress: D4:F5:13:5D:D2:06
+
+Pediu pra parear e cancelou
+11-09 16:24:39.714 7312-7312 PairApi: Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 
+11-09 16:24:45.682 7312-7312 PairApi: Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 
+
+Pediu pra parear e informou o pin errado
+11-09 16:25:35.547 8021-8021 PairApi: Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 
+11-09 16:25:42.709 8021-8021 PairApi: Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 
+
+Pediu pra parear e informou o pin certo
+11-09 16:26:18.224 8407-8407 PairApi: Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 
+11-09 16:26:27.258 8407-8407 PairApi: Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 
+11-09 16:26:28.365 8407-8407 PairApi: Bond State: 12 MacAddress: D4:F5:13:5D:D2:06 
+11-09 16:26:28.375 8407-8407 RealPairTest: Pair completed
+
+Pediu pra parear um leitor já pareado
+NÃO MOSTROU NADA
+
+##############################################################################################################################
+
+L4II Com MP10
+
+Método CreateBond
+OBS: As vezes não mostra nada e não informa nada :(
+
+Pediu pra parear e não informou o pin 
+01-01 21:15:54.700 4294-4308 PairingSystem: Pair call succeeded
+01-01 21:15:55.750 4294-4294 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+01-01 21:15:56.019 4294-4294 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+01-01 21:16:20.763 4294-4294 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+01-01 21:16:20.825 4294-4294 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+
+
+Pediu pra parear e cancelou
+01-01 21:17:11.379 4356-4370 PairingSystem: Pair call succeeded
+01-01 21:17:13.616 4356-4356 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+01-01 21:17:13.871 4356-4356 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+01-01 21:17:15.236 4356-4356 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+01-01 21:17:15.354 4356-4356 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+
+
+Pediu pra parear e informou o pin errado
+01-01 21:17:32.590 4429-4443 PairingSystem: Pair call succeeded
+01-01 21:17:32.806 4429-4429 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+01-01 21:17:33.040 4429-4429 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+01-01 21:17:36.773 4429-4429 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+01-01 21:17:36.860 4429-4429 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+
+Pediu pra parear e informou o pin certo
+01-01 21:18:00.078 4488-4502 PairingSystem: Pair call succeeded
+01-01 21:18:00.998 4488-4488 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+01-01 21:18:01.221 4488-4488 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+01-01 21:18:06.701 4488-4488 PairApi: Action: BOND_STATE_CHANGED Bond State: 12 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+01-01 21:18:06.717 4488-4488 RealPairTest: Pair completed
+
+
+##############################################################################################################################
+
+L4II Com D200
+DeviceClass: 0 - 0
+Id: No Info
+
+Método CreateBond
+
+Pediu pra parear e não informou o pin 
+01-01 03:40:20.801 4185-4185 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+01-01 03:40:45.578 4185-4185 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e cancelou
+01-01 03:42:04.488 4319-4319 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+01-01 03:42:06.126 4319-4319 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e informou o pin errado
+01-01 03:42:40.328 4381-4381 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+01-01 03:42:43.348 4381-4381 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e informou o pin certo
+01-01 03:43:31.529 4440-4440 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+01-01 03:43:39.466 4440-4440 PairApi: Bond State: 12 MacAddress: 00:07:80:7A:C6:CB 
+01-01 03:43:39.470 4440-4440 RealPairTest: Pair completed
+
+Pediu pra parear um leitor já pareado
+NÃO MOSTROU NADA
+
+##############################################################################################################################
+
+L4II Com D180
+
+Método CreateBond
+
+Pediu pra parear e não informou o pin 
+01-01 21:18:56.657 4631-4644 PairingSystem: Pair call succeeded
+01-01 21:18:56.898 4631-4631 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+01-01 21:18:57.133 4631-4631 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+01-01 21:19:21.910 4631-4631 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+01-01 21:19:21.978 4631-4631 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+Pediu pra parear e cancelou
+01-01 21:20:28.331 4791-4805 PairingSystem: Pair call succeeded
+01-01 21:20:28.661 4791-4791 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+01-01 21:20:28.940 4791-4791 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+01-01 21:20:31.148 4791-4791 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+01-01 21:20:31.266 4791-4791 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+Pediu pra parear e informou o pin errado
+01-01 21:20:50.364 4849-4863 PairingSystem: Pair call succeeded
+01-01 21:20:50.549 4849-4849 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+01-01 21:20:50.811 4849-4849 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+01-01 21:20:54.711 4849-4849 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+01-01 21:20:54.800 4849-4849 PairApi: Action: ACL_DISCONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+Pediu pra parear e informou o pin certo
+01-01 21:21:35.935 4909-4923 PairingSystem: Pair call succeeded
+01-01 21:21:37.156 4909-4909 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+01-01 21:21:37.379 4909-4909 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+01-01 21:21:42.737 4909-4909 PairApi: Action: BOND_STATE_CHANGED Bond State: 12 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+01-01 21:21:42.741 4909-4909 RealPairTest: Pair completed
+
+##############################################################################################################################
+
+Galaxy Y Com D180
+
+Método CreateBond
+OBS: 
+- Pode pedir o PIN mais de uma vez quando processo não teve sucesso
+- As vezes não manda os eventos de PAIRING_REQUEST e BONDING
+
+Pediu pra parear e não informou o pin 
+11-10 11:31:50.437 2532-2542 PairingSystem: Pair call succeeded
+11-10 11:31:53.562 2532-2532 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:31:56.539 2532-2532 PairApi: Action: BOND_STATE_CHANGED Bond State: 11 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:31:56.562 2532-2532 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:32:31.945 2532-2532 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+11-10 11:32:37.937 2532-2532 PairApi: Action: BOND_STATE_CHANGED Bond State: 11 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:32:37.976 2532-2532 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:33:13.359 2532-2532 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+11-10 11:33:22.343 2532-2532 PairApi: Action: BOND_STATE_CHANGED Bond State: 11 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:33:22.367 2532-2532 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:33:57.773 2532-2532 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+11-10 11:34:09.773 2532-2532 PairApi: Action: BOND_STATE_CHANGED Bond State: 11 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:34:09.796 2532-2532 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:34:45.179 2532-2532 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+
+Pediu pra parear e cancelou
+11-10 11:46:20.554 2994-3002 PairingSystem: Pair call succeeded
+11-10 11:46:23.812 2994-2994 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+
+Pediu pra parear e informou o pin errado
+11-10 11:46:47.929 3081-3089 PairingSystem: Pair call succeeded
+11-10 11:47:01.140 3081-3081 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+
+
+Pediu pra parear e informou o pin certo
+11-10 11:47:47.835 3180-3188 PairingSystem: Pair call succeeded
+11-10 11:47:58.007 3180-3180 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:47:58.023 3180-3180 PairApi: Action: BOND_STATE_CHANGED Bond State: 12 MacAddress: 8C:DE:52:C1:F0:13 DeviceClass: 1024 - 1028
+11-10 11:47:58.031 3180-3180 RealPairTest: Pair completed
+
+##############################################################################################################################
+
+Galaxy Y Com D200
+DeviceClass: 0 - 0
+Id: No Info
+
+Método CreateBond
+
+Pediu pra parear e não informou o pin 
+11-09 19:13:43.796 3162-3162 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 19:14:18.945 3162-3162 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e cancelou
+11-09 19:14:42.507 3271-3271 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e informou o pin errado
+11-09 19:15:09.890 3328-3328 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
+
+Pediu pra parear e informou o pin certo
+11-09 19:15:42.039 3422-3422 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
+11-09 19:15:42.046 3422-3422 PairApi: Bond State: 12 MacAddress: 00:07:80:7A:C6:CB 
+11-09 19:15:42.054 3422-3422 RealPairTest: Pair completed
+
+Pediu pra parear um leitor já pareado
+NÃO MOSTROU NADA
+
+##############################################################################################################################
+
+Galaxy Y Com MP10
+
+Método CreateBond
+
+Pediu pra parear e não informou o pin 
+11-10 11:49:24.968 3293-3301 PairingSystem: Pair call succeeded
+11-10 11:49:25.171 3293-3293 PairApi: Action: PAIRING_REQUEST Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+11-10 11:50:00.390 3293-3293 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+
+
+Pediu pra parear e cancelou
+11-10 11:51:39.945 3495-3504 PairingSystem: Pair call succeeded
+11-10 11:51:45.109 3495-3495 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+
+
+Pediu pra parear e informou o pin errado
+11-10 11:52:03.601 3550-3558 PairingSystem: Pair call succeeded
+11-10 11:52:11.953 3550-3550 PairApi: Action: BOND_STATE_CHANGED Bond State: 10 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+
+
+Pediu pra parear e informou o pin certo
+11-10 11:52:34.656 3611-3619 PairingSystem: Pair call succeeded
+11-10 11:52:48.953 3611-3611 PairApi: Action: ACL_CONNECTED Bond State: -1 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+11-10 11:52:48.960 3611-3611 PairApi: Action: BOND_STATE_CHANGED Bond State: 12 MacAddress: D4:F5:13:5D:D2:06 DeviceClass: 0 - 0
+11-10 11:52:48.984 3611-3611 RealPairTest: Pair completed
+
+Pediu pra parear um leitor já pareado
+NÃO MOSTROU NADA
