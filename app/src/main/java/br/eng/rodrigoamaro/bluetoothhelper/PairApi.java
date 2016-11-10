@@ -38,20 +38,24 @@ public class PairApi {
     }
 
     public Observable<PairEvent> pair(String macAddress) {
-        IntentFilter intentFilter = new IntentFilter(ACTION_BOND_STATE_CHANGED);
-        intentFilter.addAction(ACTION_ACL_CONNECTED);
-        intentFilter.addAction(ACTION_ACL_DISCONNECTED);
-        intentFilter.addAction(FAKE_ACTION_PAIR_REQUEST);
-        intentFilter.addAction(ACTION_PAIRING_FAILED);
-        intentFilter.addAction(ACTION_PAIRING_TIMEOUT);
+        try {
+            // The method getRemoteDevice will always return a Device even if it doesn't exists
+            // https://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html#getRemoteDevice
+            mPairingSystem.pair(mAdapter.getRemoteDevice(macAddress));
+            IntentFilter intentFilter = new IntentFilter(ACTION_BOND_STATE_CHANGED);
+            intentFilter.addAction(ACTION_ACL_CONNECTED);
+            intentFilter.addAction(ACTION_ACL_DISCONNECTED);
+            intentFilter.addAction(FAKE_ACTION_PAIR_REQUEST);
+            intentFilter.addAction(ACTION_PAIRING_FAILED);
+            intentFilter.addAction(ACTION_PAIRING_TIMEOUT);
+            return RxBroadcast.fromShortBroadcastInclusive(mContext, intentFilter, detectPairCompleted(macAddress))
+                    .flatMap(detectError(macAddress))
+                    .map(extractEvent(macAddress))
+                    .filter(RxUtils.discardNulls());
+        } catch (DevicePairingFailed devicePairingFailed) {
+            return Observable.error(devicePairingFailed);
+        }
 
-        // The method getRemoteDevice will always return a Device even if it doesn't exists
-        // https://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html#getRemoteDevice
-        mPairingSystem.pair(mAdapter.getRemoteDevice(macAddress));
-        return RxBroadcast.fromShortBroadcastInclusive(mContext, intentFilter, detectPairCompleted(macAddress))
-                .flatMap(detectError(macAddress))
-                .map(extractEvent(macAddress))
-                .filter(RxUtils.discardNulls());
     }
 
     private Func1<Intent, Observable<Intent>> detectError(final String macAddress) {

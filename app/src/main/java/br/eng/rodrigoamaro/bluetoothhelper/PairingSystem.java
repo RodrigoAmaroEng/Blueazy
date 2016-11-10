@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 public class PairingSystem {
@@ -22,23 +21,16 @@ public class PairingSystem {
 
     private static final String TAG = "PairingSystem";
 
-    public void pair(BluetoothDevice device) {
+    public void pair(BluetoothDevice device) throws DevicePairingFailed {
         pairBond(device);
     }
 
-    private void pairBond(BluetoothDevice device) {
+    private void pairBond(BluetoothDevice device) throws DevicePairingFailed {
         try {
             device.getClass().getMethod("createBond").invoke(device);
             Log.d(TAG, "Pair call succeeded");
-        } catch (NoSuchMethodException e) {
-            Log.e(TAG, "pair: ");
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            Log.e(TAG, "pair: ");
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            Log.e(TAG, "pair: ");
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new DevicePairingFailed(e);
         }
     }
 

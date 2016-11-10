@@ -23,6 +23,7 @@ import static android.bluetooth.BluetoothDevice.BOND_BONDED;
 import static android.bluetooth.BluetoothDevice.BOND_NONE;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -123,11 +124,22 @@ public class PairApiTest {
         subscriber.assertError(DevicePairingTimeout.class);
     }
 
+    @Test
+    public void pairingFailedWhenTryToPerform() throws Exception {
+        doThrow(new DevicePairingFailed()).when(mPairingSystem).pair(any(BluetoothDevice.class));
+        PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
+        Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
+        TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
+        observable.subscribe(subscriber);
+        subscriber.awaitTerminalEvent();
+        subscriber.assertNoValues();
+        subscriber.assertError(DevicePairingFailed.class);
+    }
+
     // TODO: Multiplas tentativas
     // TODO: Timeout (Talvez não seja aqui)
     // TODO: Tipos de pareamento (Outra classe deveria controlar)
     // TODO: Parar possível busca em andamento antes de parear (Talvez não seja aqui)
-    // TODO: Erro na chamada de pareamento
 
 
     /**
