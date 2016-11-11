@@ -124,23 +124,21 @@ public class SearchRequest {
 
     public static class Builder {
 
-        private Timer mTimer;
-        private SearchEngine mEngine;
+        private final ContextProvider mContextProvider;
         private String mPrefix;
         private int mSignal;
 
-        public Builder w(Timer timer) {
-            this.mTimer = timer;
-            return this;
-        }
-
-        public Builder w(SearchEngine engine) {
-            this.mEngine = engine;
-            return this;
+        public Builder(ContextProvider contextProvider) {
+            mContextProvider = contextProvider;
         }
 
         public SearchRequest create() {
-            return new SearchRequest(mTimer, mEngine, mPrefix, mSignal);
+            Injector injector = DaggerInjector
+                    .builder()
+                    .libModule(new LibModule(mContextProvider))
+                    .build();
+            return new SearchRequest(injector.timerInstance(), injector.createNewSearchEngine(),
+                    mPrefix, mSignal);
         }
 
         public Builder filterByPrefix(String prefix) {

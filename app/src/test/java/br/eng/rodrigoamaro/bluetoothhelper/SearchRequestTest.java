@@ -1,5 +1,7 @@
 package br.eng.rodrigoamaro.bluetoothhelper;
 
+import android.bluetooth.BluetoothAdapter;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,9 +50,15 @@ public class SearchRequestTest {
     @Mock
     SearchEngine mEngine;
 
+    @Mock
+    ContextProvider mContextProvider;
+
     @Before
     public void setUp() {
         doReturn(mOperation).when(mTimer).countForSeconds(anyInt(), any(OnTimeoutListener.class));
+        LibModule.setSearchEngine(mEngine);
+        LibModule.setTimer(mTimer);
+        LibModule.setBluetoothAdapter(mock(BluetoothAdapter.class));
         setupStartEventWhenSearch();
     }
 
@@ -58,7 +66,7 @@ public class SearchRequestTest {
     public void timerIsNotStartedIfOnStartIsNotCalled() throws Exception {
         Device device = mock(Device.class);
         setFoundDevicesOnEngine(device);
-        SearchRequest request = new SearchRequest.Builder().w(mTimer).w(mEngine).create();
+        SearchRequest request = new SearchRequest.Builder(mContextProvider).create();
         request.perform().subscribe();
         verify(mTimer, never()).countForSeconds(anyInt(), any(OnTimeoutListener.class));
     }
@@ -67,7 +75,7 @@ public class SearchRequestTest {
     public void whenFindDeviceInsertOnList() throws Exception {
         Device device = mock(Device.class);
         setFoundDevicesOnEngine(device);
-        SearchRequest request = new SearchRequest.Builder().w(mTimer).w(mEngine).create();
+        SearchRequest request = new SearchRequest.Builder(mContextProvider).create();
         request.perform().subscribe();
         assertEquals(device, request.getDevices()[0]);
     }
@@ -76,7 +84,7 @@ public class SearchRequestTest {
     public void whenStartSearchClearsTheDeviceList() throws Exception {
         Device device = mock(Device.class);
         setFoundDevicesOnEngine(device);
-        SearchRequest request = new SearchRequest.Builder().w(mTimer).w(mEngine).create();
+        SearchRequest request = new SearchRequest.Builder(mContextProvider).create();
         request.perform().subscribe();
         request.perform().subscribe();
         assertEquals(1, request.getDevices().length);
@@ -85,21 +93,21 @@ public class SearchRequestTest {
     @Test
     public void whenTimeEndStopSearch() throws Exception {
         setInstantaneousFinishOnTimer();
-        SearchRequest request = new SearchRequest.Builder().w(mTimer).w(mEngine).create();
+        SearchRequest request = new SearchRequest.Builder(mContextProvider).create();
         request.perform().subscribe();
         verify(mEngine).stop();
     }
 
     @Test
     public void doNotStopSearchBeforeTimeEnds() throws Exception {
-        SearchRequest request = new SearchRequest.Builder().w(mTimer).w(mEngine).create();
+        SearchRequest request = new SearchRequest.Builder(mContextProvider).create();
         request.perform().subscribe();
         verify(mEngine, never()).stop();
     }
 
     @Test
     public void ifRequestToStopMustCallStopOnEngine() throws Exception {
-        SearchRequest request = new SearchRequest.Builder().w(mTimer).w(mEngine).create();
+        SearchRequest request = new SearchRequest.Builder(mContextProvider).create();
         request.stop();
         verify(mEngine).stop();
     }
@@ -115,7 +123,7 @@ public class SearchRequestTest {
                     }
                 });
         doReturn(observable).when(mEngine).search();
-        SearchRequest request = new SearchRequest.Builder().w(mTimer).w(mEngine).create();
+        SearchRequest request = new SearchRequest.Builder(mContextProvider).create();
         request.perform().subscribe();
         latch.await();
         request.stop();
@@ -124,7 +132,7 @@ public class SearchRequestTest {
 
     @Test
     public void searchDefaultDurationMustBe30Seconds() throws Exception {
-        SearchRequest request = new SearchRequest.Builder().w(mTimer).w(mEngine).create();
+        SearchRequest request = new SearchRequest.Builder(mContextProvider).create();
         request.perform().subscribe();
         verify(mTimer).countForSeconds(eq(30), any(OnTimeoutListener.class));
     }
@@ -133,7 +141,7 @@ public class SearchRequestTest {
     public void filterByName() throws Exception {
         setFoundDevicesOnEngine(newDevice("MP", -12), newDevice("PAX123", -12),
                 newDevice("MP2", -12), newDevice("PAX324", -12));
-        SearchRequest request = new SearchRequest.Builder().w(mTimer).w(mEngine)
+        SearchRequest request = new SearchRequest.Builder(mContextProvider)
                 .filterByPrefix("PAX").create();
         Observable<Device> observable = request.perform();
         TestSubscriber<Device> subscriber = new TestSubscriber<>();
@@ -145,7 +153,7 @@ public class SearchRequestTest {
     public void capturedResultsWhenFilterByName() throws Exception {
         setFoundDevicesOnEngine(newDevice("MP", -12), newDevice("PAX123", -12),
                 newDevice("MP2", -12), newDevice("PAX324", -12));
-        SearchRequest request = new SearchRequest.Builder().w(mTimer).w(mEngine)
+        SearchRequest request = new SearchRequest.Builder(mContextProvider)
                 .filterByPrefix("PAX").create();
         request.perform().subscribe();
         assertEquals(2, request.getDevices().length);
@@ -155,7 +163,7 @@ public class SearchRequestTest {
     public void filterBySignal() throws Exception {
         setFoundDevicesOnEngine(newDevice("MP", -56), newDevice("PAX123", -43),
                 newDevice("MP2", 51), newDevice("PAX324", 12));
-        SearchRequest request = new SearchRequest.Builder().w(mTimer).w(mEngine)
+        SearchRequest request = new SearchRequest.Builder(mContextProvider)
                 .filterBySignal(50).create();
         Observable<Device> observable = request.perform();
         TestSubscriber<Device> subscriber = new TestSubscriber<>();
@@ -167,7 +175,7 @@ public class SearchRequestTest {
     public void filterBySignalAndName() throws Exception {
         setFoundDevicesOnEngine(newDevice("MP", -56), newDevice("PAX123", -43),
                 newDevice("MP2", 51), newDevice("PAX324", 12));
-        SearchRequest request = new SearchRequest.Builder().w(mTimer).w(mEngine)
+        SearchRequest request = new SearchRequest.Builder(mContextProvider)
                 .filterBySignal(50)
                 .filterByPrefix("PAX")
                 .create();
