@@ -22,6 +22,7 @@ import static android.bluetooth.BluetoothDevice.ACTION_BOND_STATE_CHANGED;
 import static android.bluetooth.BluetoothDevice.BOND_BONDED;
 import static android.bluetooth.BluetoothDevice.BOND_NONE;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -53,11 +54,13 @@ public class PairApiTest {
 
     @Test
     public void pairMustCallDevicePairSystem() throws Exception {
+        BluetoothDevice device = mock(BluetoothDevice.class);
+        doReturn(device).when(mAdapter).getRemoteDevice(eq(MAC_ADDRESS_1));
         PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
-        verify(mPairingSystem).pair(any(BluetoothDevice.class));
+        verify(mPairingSystem).pair(eq(device));
     }
 
     @Test

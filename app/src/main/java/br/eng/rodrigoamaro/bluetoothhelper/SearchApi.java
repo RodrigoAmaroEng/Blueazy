@@ -11,21 +11,14 @@ import rx.functions.Func1;
 
 import static android.bluetooth.BluetoothAdapter.ACTION_DISCOVERY_FINISHED;
 import static android.bluetooth.BluetoothAdapter.ACTION_DISCOVERY_STARTED;
-import static android.bluetooth.BluetoothAdapter.EXTRA_STATE;
-import static android.bluetooth.BluetoothAdapter.STATE_OFF;
-import static android.bluetooth.BluetoothAdapter.STATE_ON;
 import static android.bluetooth.BluetoothDevice.ACTION_FOUND;
 
-public class SearchApi {
-
-    private final Context mContext;
-    private final BluetoothAdapter mAdapter;
+public class SearchApi extends BluetoothApi {
 
     private boolean mStopRequested;
 
     public SearchApi(Context context, BluetoothAdapter adapter) {
-        mContext = context;
-        mAdapter = adapter;
+        super(adapter, context);
     }
 
     public void stop() {
@@ -42,20 +35,6 @@ public class SearchApi {
         return RxBroadcast.fromShortBroadcast(mContext, intentFilter, detectEndOfSearch())
                 .map(extractEvent())
                 .filter(RxUtils.discardNulls());
-    }
-
-    public Observable<Intent> turnBluetoothOn() {
-        mAdapter.enable();
-        IntentFilter intentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        return RxBroadcast.fromShortBroadcast(mContext, intentFilter, filterState(STATE_ON))
-                .ignoreElements();
-    }
-
-    public Observable<Intent> turnBluetoothOff() {
-        mAdapter.disable();
-        IntentFilter intentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        return RxBroadcast.fromShortBroadcast(mContext, intentFilter, filterState(STATE_OFF))
-                .ignoreElements();
     }
 
     private Func1<Intent, Boolean> detectEndOfSearch() {
@@ -84,17 +63,5 @@ public class SearchApi {
         };
     }
 
-    private Func1<Intent, Boolean> filterState(final int state) {
-        return new Func1<Intent, Boolean>() {
-            @Override
-            public Boolean call(Intent intent) {
-                return intent.getIntExtra(EXTRA_STATE, -1) == state;
-            }
-        };
-    }
 
-
-    public boolean isBluetoothOn() {
-        return mAdapter.isEnabled();
-    }
 }

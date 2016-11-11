@@ -19,7 +19,7 @@ import static android.bluetooth.BluetoothDevice.BOND_NONE;
 import static android.bluetooth.BluetoothDevice.EXTRA_BOND_STATE;
 import static android.bluetooth.BluetoothDevice.EXTRA_DEVICE;
 
-public class PairApi {
+public class PairApi extends BluetoothApi {
 
     private static final String TAG = "PairApi";
     private static final String FAKE_ACTION_PAIR_REQUEST = "android.bluetooth.device.action.PAIRING_REQUEST";
@@ -27,13 +27,10 @@ public class PairApi {
     public static final String ACTION_PAIRING_TIMEOUT = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_TIMEOUT";
     public static final String ACTION_PAIRING_FAILED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_FAILED";
     public static final String ACTION_PAIRING_NOT_DONE = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_NOT_DONE";
-    private final Context mContext;
-    private final BluetoothAdapter mAdapter;
     private final PairingSystem mPairingSystem;
 
     public PairApi(Context context, BluetoothAdapter adapter, PairingSystem pairingSystem) {
-        mContext = context;
-        mAdapter = adapter;
+        super(adapter, context);
         mPairingSystem = pairingSystem;
     }
 
