@@ -49,7 +49,7 @@ public class RealPairTest {
         api.pair(MAC_MP10)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
-                .subscribe(new Subscriber<BluetoothDevice>() {
+                .subscribe(new Subscriber<PairEvent>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "Pair completed");
@@ -63,7 +63,7 @@ public class RealPairTest {
                     }
 
                     @Override
-                    public void onNext(BluetoothDevice device) {
+                    public void onNext(PairEvent device) {
 
                     }
                 });

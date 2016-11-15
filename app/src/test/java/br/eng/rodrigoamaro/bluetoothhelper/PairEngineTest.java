@@ -70,18 +70,10 @@ public class PairEngineTest {
         subscriber.assertNoErrors();
     }
 
-    @Test
-    public void returnWaitTill() {
-        BluetoothDevice device = mock(BluetoothDevice.class);
-        setPairRequestSucceeded(device);
-        PairEngine engine = new PairEngine(mPairApi);
-        Observable<BluetoothDevice> observable = engine.pair(MAC_ADDRESS_1);
-        TestSubscriber<BluetoothDevice> subscriber = new TestSubscriber<>();
-        observable.subscribe(subscriber);
-        subscriber.awaitTerminalEvent();
-        subscriber.assertValue(device);
-        subscriber.assertNoErrors();
-    }
+    // TODO: Temos que fazer testes que usam as diversas respostas que podem vir
+    // TODO: Evento de falha
+    // TODO: Evento de erro no pareamento
+    // TODO: Evento de timeout
 
     private void setPairRequestSucceeded(BluetoothDevice device) {
         doReturn(Observable.just(new PairEvent(PairApi.ACTION_PAIRING_SUCCEEDED, device)))
