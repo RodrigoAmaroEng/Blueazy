@@ -139,11 +139,35 @@ public class PairApiTest {
         subscriber.assertError(DevicePairingFailed.class);
     }
 
-    // TODO: Multiplas tentativas
-    // TODO: Timeout (Talvez não seja aqui)
-    // TODO: Tipos de pareamento (Outra classe deveria controlar)
-    // TODO: Parar possível busca em andamento antes de parear (Talvez não seja aqui)
+    @Test
+    public void sendBroadcastMessageForTimeout() throws Exception {
+        BluetoothDevice device = mock(BluetoothDevice.class);
+        doReturn(MAC_ADDRESS_1).when(device).getAddress();
+        doReturn(device).when(mAdapter).getRemoteDevice(eq(MAC_ADDRESS_1));
+        PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
+        Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
+        TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
+        observable.subscribe(subscriber);
+        api.sendTimeoutMessage(MAC_ADDRESS_1);
+        subscriber.awaitTerminalEvent();
+        subscriber.assertError(DevicePairingTimeout.class);
+    }
 
+    @Test
+    public void sendBroadcastMessageForError() throws Exception {
+        BluetoothDevice device = mock(BluetoothDevice.class);
+        doReturn(MAC_ADDRESS_1).when(device).getAddress();
+        doReturn(device).when(mAdapter).getRemoteDevice(eq(MAC_ADDRESS_1));
+        PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
+        Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
+        TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
+        observable.subscribe(subscriber);
+        api.sendErrorMessage(MAC_ADDRESS_1);
+        subscriber.awaitTerminalEvent();
+        subscriber.assertError(DevicePairingFailed.class);
+    }
+
+    // TODO: Parar possível busca em andamento antes de parear (Talvez não seja aqui)
 
     /**
      * TODO: O código abaixo parece fornecer uma solução para o problema do pareamento (API 19+)

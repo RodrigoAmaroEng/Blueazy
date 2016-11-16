@@ -5,8 +5,6 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
 import rx.Observable;
 import rx.functions.Func1;
@@ -35,6 +33,18 @@ public class PairApi extends BluetoothApi {
         mPairingSystem = pairingSystem;
     }
 
+    public void sendTimeoutMessage(String macAddress) {
+        Intent intent = new Intent(ACTION_PAIRING_TIMEOUT);
+        intent.putExtra(EXTRA_DEVICE, mAdapter.getRemoteDevice(macAddress));
+        mContext.sendBroadcast(intent);
+    }
+
+    public void sendErrorMessage(String macAddress) {
+        Intent intent = new Intent(ACTION_PAIRING_FAILED);
+        intent.putExtra(EXTRA_DEVICE, mAdapter.getRemoteDevice(macAddress));
+        mContext.sendBroadcast(intent);
+    }
+
     public Observable<PairEvent> pair(String macAddress) {
         try {
             // The method getRemoteDevice will always return a Device even if it doesn't exists
@@ -55,6 +65,18 @@ public class PairApi extends BluetoothApi {
             return Observable.error(devicePairingFailed);
         }
 
+    }
+
+    private Func1<Intent, Boolean> detectPairCompleted(final String macAddress) {
+        return new Func1<Intent, Boolean>() {
+            @Override
+            public Boolean call(Intent intent) {
+                int state = intent.getIntExtra(EXTRA_BOND_STATE, -1);
+                BluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
+                return device != null && macAddress.equals(device.getAddress())
+                        && state == BOND_BONDED;
+            }
+        };
     }
 
     private Func1<? super Intent, Boolean> onlyEventsForThisDevice(final String macAddress) {
@@ -98,37 +120,4 @@ public class PairApi extends BluetoothApi {
         };
     }
 
-    private void log(int state, String action, BluetoothDevice device) {
-        Log.d(TAG, "Action: " + action + " Bond State: " + state +
-                " MacAddress: " + device.getAddress() +
-                " DeviceClass: " + getDeviceClass(device));
-    }
-
-    @NonNull
-    private String getDeviceClass(BluetoothDevice device) {
-        if (device.getBluetoothClass() != null) {
-            return device.getBluetoothClass().getMajorDeviceClass() + " - " +
-                    device.getBluetoothClass().getDeviceClass();
-        }
-        return "No information";
-    }
-
-    private Func1<Intent, Boolean> detectPairCompleted(final String macAddress) {
-        return new Func1<Intent, Boolean>() {
-            @Override
-            public Boolean call(Intent intent) {
-                int state = intent.getIntExtra(EXTRA_BOND_STATE, -1);
-                BluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
-                return macAddress.equals(device.getAddress()) && state == BOND_BONDED;
-            }
-        };
-    }
-
-    public void sendTimeoutMessage(String macAddress) {
-        //mContext.sendBroadcast();
-    }
-
-    public void sendErrorMessage(String macAddress) {
-
-    }
 }
