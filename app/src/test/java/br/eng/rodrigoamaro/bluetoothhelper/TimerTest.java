@@ -70,9 +70,9 @@ public class TimerTest {
     @Test
     public void stopAvoidListenerToBeCalled() throws Exception {
         Timer timer = new Timer();
-        TimerOperation operation = timer.countForSeconds(2, mListener);
+        TimerOperation operation = timer.countForSeconds(1, mListener);
         timer.cancel(operation);
-        mLatch.await(3, TimeUnit.SECONDS);
+        mLatch.await(2, TimeUnit.SECONDS);
         assertEquals(1, mLatch.getCount());
     }
 
