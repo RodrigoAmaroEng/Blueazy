@@ -1,7 +1,6 @@
 package br.eng.rodrigoamaro.bluetoothhelper;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.Build;
 import android.os.Looper;
@@ -19,13 +18,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * TODO: Para gerar diversos exemplos podemos testar cenários variando
- * - O Celular
- * - O Leitor
- * - O método de pareamento (CreateBond,CreateRfCommSerial,CreateRfCommX)
- * Durante pareamento devemos checar como o celular identifica o leitor
  * TODO: Parece que o Broadcast receiver não é removido em casos onde o Rx é interrompido...
- * Como fica quando receber uma solicitação de cancelamento?
  **/
 @RunWith(AndroidJUnit4.class)
 public class RealPairTest {
@@ -39,7 +32,12 @@ public class RealPairTest {
     @Test
     public void testRealPair() throws Exception {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        ContextProvider appContext = new ContextProvider() {
+            @Override
+            public Context getContext() {
+                return InstrumentationRegistry.getTargetContext();
+            }
+        };
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             Looper.prepare();
         }

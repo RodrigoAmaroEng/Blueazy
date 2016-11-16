@@ -2,7 +2,6 @@ package br.eng.rodrigoamaro.bluetoothhelper;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
@@ -28,21 +27,21 @@ public class PairApi extends BluetoothApi {
     public static final String ACTION_PAIRING_ON_PROGRESS = "android.bluetooth.device.action.PAIRING_ON_PROGRESS";
     private final PairingSystem mPairingSystem;
 
-    public PairApi(Context context, BluetoothAdapter adapter, PairingSystem pairingSystem) {
-        super(adapter, context);
+    public PairApi(ContextProvider context, BluetoothAdapter adapter, PairingSystem pairingSystem) {
+        super(context, adapter);
         mPairingSystem = pairingSystem;
     }
 
     public void sendTimeoutMessage(String macAddress) {
         Intent intent = new Intent(ACTION_PAIRING_TIMEOUT);
         intent.putExtra(EXTRA_DEVICE, mAdapter.getRemoteDevice(macAddress));
-        mContext.sendBroadcast(intent);
+        mContext.getContext().sendBroadcast(intent);
     }
 
     public void sendErrorMessage(String macAddress) {
         Intent intent = new Intent(ACTION_PAIRING_FAILED);
         intent.putExtra(EXTRA_DEVICE, mAdapter.getRemoteDevice(macAddress));
-        mContext.sendBroadcast(intent);
+        mContext.getContext().sendBroadcast(intent);
     }
 
     public Observable<PairEvent> pair(String macAddress) {
@@ -56,7 +55,7 @@ public class PairApi extends BluetoothApi {
             intentFilter.addAction(ACTION_FAKE_PAIR_REQUEST);
             intentFilter.addAction(ACTION_PAIRING_FAILED);
             intentFilter.addAction(ACTION_PAIRING_TIMEOUT);
-            return RxBroadcast.fromShortBroadcastInclusive(mContext, intentFilter, detectPairCompleted(macAddress))
+            return RxBroadcast.fromShortBroadcastInclusive(mContext.getContext(), intentFilter, detectPairCompleted(macAddress))
                     .filter(onlyEventsForThisDevice(macAddress))
                     .flatMap(detectError())
                     .map(extractEvent())

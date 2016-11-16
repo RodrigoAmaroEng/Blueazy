@@ -1,7 +1,6 @@
 package br.eng.rodrigoamaro.bluetoothhelper;
 
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
@@ -13,10 +12,10 @@ import static android.bluetooth.BluetoothAdapter.STATE_OFF;
 import static android.bluetooth.BluetoothAdapter.STATE_ON;
 
 public class BluetoothApi {
-    protected final Context mContext;
+    protected final ContextProvider mContext;
     protected final BluetoothAdapter mAdapter;
 
-    public BluetoothApi(BluetoothAdapter adapter, Context context) {
+    public BluetoothApi(ContextProvider context, BluetoothAdapter adapter) {
         mAdapter = adapter;
         mContext = context;
     }
@@ -24,14 +23,14 @@ public class BluetoothApi {
     public Observable<Intent> turnBluetoothOn() {
         mAdapter.enable();
         IntentFilter intentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        return RxBroadcast.fromShortBroadcast(mContext, intentFilter, filterState(STATE_ON))
+        return RxBroadcast.fromShortBroadcast(mContext.getContext(), intentFilter, filterState(STATE_ON))
                 .ignoreElements();
     }
 
     public Observable<Intent> turnBluetoothOff() {
         mAdapter.disable();
         IntentFilter intentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        return RxBroadcast.fromShortBroadcast(mContext, intentFilter, filterState(STATE_OFF))
+        return RxBroadcast.fromShortBroadcast(mContext.getContext(), intentFilter, filterState(STATE_OFF))
                 .ignoreElements();
     }
 

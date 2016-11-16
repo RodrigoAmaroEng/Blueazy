@@ -39,8 +39,7 @@ class LibModule {
     @Provides
     public SearchApi provideSearchApi(BluetoothAdapter bluetoothAdapter) {
         if (sSearchApi == null) {
-            // TODO: Mudar para receber o contextProvider
-            return new SearchApi(mContextProvider.getContext(), bluetoothAdapter);
+            return new SearchApi(mContextProvider, bluetoothAdapter);
         }
         return sSearchApi;
     }
@@ -98,8 +97,7 @@ class LibModule {
     protected PairApi providePairApi(BluetoothAdapter adapter,
                                      PairingSystem pairingSystem) {
         if (sPairApi == null) {
-            // TODO: Mudar para receber o contextProvider
-            return new PairApi(mContextProvider.getContext(), adapter, pairingSystem);
+            return new PairApi(mContextProvider, adapter, pairingSystem);
         }
         return sPairApi;
     }

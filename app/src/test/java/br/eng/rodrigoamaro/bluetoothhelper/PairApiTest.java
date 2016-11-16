@@ -3,6 +3,7 @@ package br.eng.rodrigoamaro.bluetoothhelper;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 
 import org.junit.Rule;
@@ -49,6 +50,13 @@ public class PairApiTest {
     @Mock
     PairingSystem mPairingSystem;
 
+    ContextProvider mContextProvider = new ContextProvider() {
+        @Override
+        public Context getContext() {
+            return RuntimeEnvironment.application;
+        }
+    };
+
     private static final String MAC_ADDRESS_1 = "00:11:22:33:44:55";
     private static final String MAC_ADDRESS_2 = "00:11:22:33:44:66";
 
@@ -56,7 +64,7 @@ public class PairApiTest {
     public void pairMustCallDevicePairSystem() throws Exception {
         BluetoothDevice device = mock(BluetoothDevice.class);
         doReturn(device).when(mAdapter).getRemoteDevice(eq(MAC_ADDRESS_1));
-        PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
+        PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
@@ -65,7 +73,7 @@ public class PairApiTest {
 
     @Test
     public void deviceIsSuccessfullyPaired() throws Exception {
-        PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
+        PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
@@ -78,7 +86,7 @@ public class PairApiTest {
 
     @Test
     public void pairingSuccessAfterReceiveDeviceNotBounded() throws Exception {
-        PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
+        PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
@@ -93,7 +101,7 @@ public class PairApiTest {
 
     @Test
     public void anotherDeviceIsPaired() throws Exception {
-        PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
+        PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
@@ -105,7 +113,7 @@ public class PairApiTest {
 
     @Test
     public void pairingFailed() throws Exception {
-        PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
+        PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
@@ -117,7 +125,7 @@ public class PairApiTest {
 
     @Test
     public void cancelPairOperationSameAsTimeout() throws Exception {
-        PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
+        PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
@@ -130,7 +138,7 @@ public class PairApiTest {
     @Test
     public void pairingFailedWhenTryToPerform() throws Exception {
         doThrow(new DevicePairingFailed()).when(mPairingSystem).pair(any(BluetoothDevice.class));
-        PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
+        PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
@@ -144,7 +152,7 @@ public class PairApiTest {
         BluetoothDevice device = mock(BluetoothDevice.class);
         doReturn(MAC_ADDRESS_1).when(device).getAddress();
         doReturn(device).when(mAdapter).getRemoteDevice(eq(MAC_ADDRESS_1));
-        PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
+        PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
@@ -158,7 +166,7 @@ public class PairApiTest {
         BluetoothDevice device = mock(BluetoothDevice.class);
         doReturn(MAC_ADDRESS_1).when(device).getAddress();
         doReturn(device).when(mAdapter).getRemoteDevice(eq(MAC_ADDRESS_1));
-        PairApi api = new PairApi(RuntimeEnvironment.application, mAdapter, mPairingSystem);
+        PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);

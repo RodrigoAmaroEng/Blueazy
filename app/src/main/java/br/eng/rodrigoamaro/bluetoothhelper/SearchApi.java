@@ -2,7 +2,6 @@ package br.eng.rodrigoamaro.bluetoothhelper;
 
 
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
@@ -17,8 +16,8 @@ public class SearchApi extends BluetoothApi {
 
     private boolean mStopRequested;
 
-    public SearchApi(Context context, BluetoothAdapter adapter) {
-        super(adapter, context);
+    public SearchApi(ContextProvider context, BluetoothAdapter adapter) {
+        super(context, adapter);
     }
 
     public void stop() {
@@ -32,7 +31,7 @@ public class SearchApi extends BluetoothApi {
         IntentFilter intentFilter = new IntentFilter(ACTION_DISCOVERY_STARTED);
         intentFilter.addAction(ACTION_DISCOVERY_FINISHED);
         intentFilter.addAction(ACTION_FOUND);
-        return RxBroadcast.fromShortBroadcast(mContext, intentFilter, detectEndOfSearch())
+        return RxBroadcast.fromShortBroadcast(mContext.getContext(), intentFilter, detectEndOfSearch())
                 .map(extractEvent())
                 .filter(RxUtils.discardNulls());
     }
