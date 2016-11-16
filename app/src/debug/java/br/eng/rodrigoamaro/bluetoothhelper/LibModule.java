@@ -8,7 +8,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class LibModule {
+class LibModule {
 
     private final ContextProvider mContextProvider;
 
@@ -39,6 +39,7 @@ public class LibModule {
     @Provides
     public SearchApi provideSearchApi(BluetoothAdapter bluetoothAdapter) {
         if (sSearchApi == null) {
+            // TODO: Mudar para receber o contextProvider
             return new SearchApi(mContextProvider.getContext(), bluetoothAdapter);
         }
         return sSearchApi;
@@ -71,5 +72,50 @@ public class LibModule {
             return new Timer();
         }
         return sTimer;
+    }
+
+    private static PairEngine sPairEngine;
+
+    public static void setPairEngine(PairEngine pairEngine) {
+        sPairEngine = pairEngine;
+    }
+
+    @Provides
+    protected PairEngine providePairEngine(PairApi pairApi) {
+        if (sPairEngine == null) {
+            return new PairEngine(pairApi);
+        }
+        return sPairEngine;
+    }
+
+    private static PairApi sPairApi;
+
+    public static void setPairApi(PairApi pairApi) {
+        sPairApi = pairApi;
+    }
+
+    @Provides
+    protected PairApi providePairApi(BluetoothAdapter adapter,
+                                     PairingSystem pairingSystem) {
+        if (sPairApi == null) {
+            // TODO: Mudar para receber o contextProvider
+            return new PairApi(mContextProvider.getContext(), adapter, pairingSystem);
+        }
+        return sPairApi;
+    }
+
+    private static PairingSystem sPairingSystem;
+
+    public static void setPairingSystem(PairingSystem pairingSystem) {
+        sPairingSystem = pairingSystem;
+    }
+
+    @Singleton
+    @Provides
+    protected PairingSystem providePairingSystem() {
+        if (sPairingSystem == null) {
+            return new PairingSystem();
+        }
+        return sPairingSystem;
     }
 }

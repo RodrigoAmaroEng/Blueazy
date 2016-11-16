@@ -27,6 +27,7 @@ public class PairApi extends BluetoothApi {
     public static final String ACTION_PAIRING_TIMEOUT = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_TIMEOUT";
     public static final String ACTION_PAIRING_FAILED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_FAILED";
     public static final String ACTION_PAIRING_NOT_DONE = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_NOT_DONE";
+    public static final String ACTION_PAIRING_ON_PROGRESS = "android.bluetooth.device.action.PAIRING_ON_PROGRESS";
     private final PairingSystem mPairingSystem;
 
     public PairApi(Context context, BluetoothAdapter adapter, PairingSystem pairingSystem) {
@@ -121,5 +122,13 @@ public class PairApi extends BluetoothApi {
                 return macAddress.equals(device.getAddress()) && state == BOND_BONDED;
             }
         };
+    }
+
+    public void sendTimeoutMessage(String macAddress) {
+        //mContext.sendBroadcast();
+    }
+
+    public void sendErrorMessage(String macAddress) {
+
     }
 }

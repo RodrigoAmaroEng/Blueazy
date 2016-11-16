@@ -1,6 +1,5 @@
 package br.eng.rodrigoamaro.bluetoothhelper;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 
 import rx.Observable;
@@ -13,19 +12,14 @@ public class PairEngine {
         mPairApi = pairApi;
     }
 
-    public Observable<BluetoothDevice> pair(String macAddress) {
-        if (!mPairApi.isBluetoothOn()) {
-            return mPairApi.turnBluetoothOn()
-                    .map(toPairEvent())
-                    .concatWith(mPairApi.pair(macAddress))
-                    .map(extractDevice());
-        } else {
-            return mPairApi.turnBluetoothOff()
-                    .concatWith(mPairApi.turnBluetoothOn())
-                    .map(toPairEvent())
-                    .concatWith(mPairApi.pair(macAddress))
-                    .map(extractDevice());
+    public Observable<PairEvent> pair(String macAddress) {
+        Observable<Intent> observable = mPairApi.turnBluetoothOn();
+        if (mPairApi.isBluetoothOn()) {
+            observable = mPairApi.turnBluetoothOff().concatWith(observable);
         }
+        return observable
+                .map(toPairEvent())
+                .concatWith(mPairApi.pair(macAddress));
     }
 
     private Func1<? super Intent, PairEvent> toPairEvent() {
@@ -37,12 +31,12 @@ public class PairEngine {
         };
     }
 
-    private Func1<PairEvent, BluetoothDevice> extractDevice() {
-        return new Func1<PairEvent, BluetoothDevice>() {
-            @Override
-            public BluetoothDevice call(PairEvent event) {
-                return event.getDevice();
-            }
-        };
+
+    public void notifyTimeout(String macAddress) {
+        mPairApi.sendTimeoutMessage(macAddress);
+    }
+
+    public void notifyError(String macAddress) {
+        mPairApi.sendErrorMessage(macAddress);
     }
 }

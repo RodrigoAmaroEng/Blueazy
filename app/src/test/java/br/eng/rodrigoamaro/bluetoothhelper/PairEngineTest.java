@@ -15,6 +15,7 @@ import rx.Observable;
 import rx.observers.TestSubscriber;
 
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -40,8 +41,8 @@ public class PairEngineTest {
     public void turnBluetoothOnBeforeStartPairing() {
         setBluetoothOff();
         PairEngine engine = new PairEngine(mPairApi);
-        Observable<BluetoothDevice> observable = engine.pair(MAC_ADDRESS_1);
-        TestSubscriber<BluetoothDevice> subscriber = new TestSubscriber<>();
+        Observable<PairEvent> observable = engine.pair(MAC_ADDRESS_1);
+        TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
         verify(mPairApi).turnBluetoothOn();
     }
@@ -50,8 +51,8 @@ public class PairEngineTest {
     public void ifBluetoothIsOnTurnOffAndOnBeforeStartPairing() {
         setBluetoothOn();
         PairEngine engine = new PairEngine(mPairApi);
-        Observable<BluetoothDevice> observable = engine.pair(MAC_ADDRESS_1);
-        TestSubscriber<BluetoothDevice> subscriber = new TestSubscriber<>();
+        Observable<PairEvent> observable = engine.pair(MAC_ADDRESS_1);
+        TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
         verify(mPairApi).turnBluetoothOff();
         verify(mPairApi).turnBluetoothOn();
@@ -62,18 +63,27 @@ public class PairEngineTest {
         BluetoothDevice device = mock(BluetoothDevice.class);
         setPairRequestSucceeded(device);
         PairEngine engine = new PairEngine(mPairApi);
-        Observable<BluetoothDevice> observable = engine.pair(MAC_ADDRESS_1);
-        TestSubscriber<BluetoothDevice> subscriber = new TestSubscriber<>();
+        Observable<PairEvent> observable = engine.pair(MAC_ADDRESS_1);
+        TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
         subscriber.awaitTerminalEvent();
-        subscriber.assertValue(device);
+        subscriber.assertValue(new PairEvent(PairApi.ACTION_PAIRING_SUCCEEDED, device));
         subscriber.assertNoErrors();
     }
 
-    // TODO: Temos que fazer testes que usam as diversas respostas que podem vir
-    // TODO: Evento de falha
-    // TODO: Evento de erro no pareamento
-    // TODO: Evento de timeout
+    @Test
+    public void notifyTimeoutCallsSendTimeoutMessageOnApi() {
+        PairEngine engine = new PairEngine(mPairApi);
+        engine.notifyTimeout(MAC_ADDRESS_1);
+        verify(mPairApi).sendTimeoutMessage(eq(MAC_ADDRESS_1));
+    }
+
+    @Test
+    public void notifyErrorCallsSendErrorMessageOnApi() {
+        PairEngine engine = new PairEngine(mPairApi);
+        engine.notifyError(MAC_ADDRESS_1);
+        verify(mPairApi).sendErrorMessage(eq(MAC_ADDRESS_1));
+    }
 
     private void setPairRequestSucceeded(BluetoothDevice device) {
         doReturn(Observable.just(new PairEvent(PairApi.ACTION_PAIRING_SUCCEEDED, device)))

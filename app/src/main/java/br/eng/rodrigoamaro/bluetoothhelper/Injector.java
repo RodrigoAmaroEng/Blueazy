@@ -11,4 +11,6 @@ public interface Injector {
     SearchEngine createNewSearchEngine();
 
     Timer timerInstance();
+
+    PairEngine createNewPairEngine();
 }
