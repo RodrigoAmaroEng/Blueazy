@@ -4,8 +4,10 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 
 import rx.Observable;
+import rx.functions.Func0;
 import rx.functions.Func1;
 
 import static android.bluetooth.BluetoothDevice.ACTION_ACL_CONNECTED;
@@ -45,25 +47,37 @@ public class PairApi extends BluetoothApi {
     }
 
     public Observable<PairEvent> pair(String macAddress) {
-        try {
-            // The method getRemoteDevice will always return a Device even if it doesn't exists
-            // https://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html#getRemoteDevice
-            mPairingSystem.pair(mAdapter.getRemoteDevice(macAddress));
+
+
             IntentFilter intentFilter = new IntentFilter(ACTION_BOND_STATE_CHANGED);
             intentFilter.addAction(ACTION_ACL_CONNECTED);
             intentFilter.addAction(ACTION_ACL_DISCONNECTED);
             intentFilter.addAction(ACTION_FAKE_PAIR_REQUEST);
             intentFilter.addAction(ACTION_PAIRING_FAILED);
             intentFilter.addAction(ACTION_PAIRING_TIMEOUT);
-            return RxBroadcast.fromShortBroadcastInclusive(mContext.getContext(), intentFilter, detectPairCompleted(macAddress))
+            return RxBroadcast.fromShortBroadcastInclusive(mContext.getContext(), intentFilter,
+                    detectPairCompleted(macAddress), startPairProcess(macAddress))
                     .filter(onlyEventsForThisDevice(macAddress))
                     .flatMap(detectError())
                     .map(extractEvent())
                     .filter(RxUtils.discardNulls());
-        } catch (DevicePairingFailed devicePairingFailed) {
-            return Observable.error(devicePairingFailed);
-        }
 
+    }
+
+    private Func0<Observable<Intent>> startPairProcess(final String macAddress) {
+        return new Func0<Observable<Intent>>() {
+            @Override
+            public Observable<Intent> call() {
+                try {
+                    // The method getRemoteDevice will always return a Device even if it doesn't exists
+                    // https://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html#getRemoteDevice
+                    mPairingSystem.pair(mAdapter.getRemoteDevice(macAddress));
+                    return Observable.empty();
+                } catch (DevicePairingFailed devicePairingFailed) {
+                    return Observable.error(devicePairingFailed);
+                }
+            }
+        };
     }
 
     private Func1<Intent, Boolean> detectPairCompleted(final String macAddress) {
@@ -82,6 +96,7 @@ public class PairApi extends BluetoothApi {
         return new Func1<Intent, Boolean>() {
             @Override
             public Boolean call(Intent intent) {
+                Log.d(TAG, "Action: " + intent.getAction());
                 BluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
                 return macAddress.equals(device.getAddress());
             }

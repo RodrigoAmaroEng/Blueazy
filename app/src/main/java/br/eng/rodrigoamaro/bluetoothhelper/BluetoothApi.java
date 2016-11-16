@@ -3,6 +3,7 @@ package br.eng.rodrigoamaro.bluetoothhelper;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 
 import rx.Observable;
 import rx.functions.Func1;
@@ -12,6 +13,7 @@ import static android.bluetooth.BluetoothAdapter.STATE_OFF;
 import static android.bluetooth.BluetoothAdapter.STATE_ON;
 
 public class BluetoothApi {
+    private static final String TAG = "BluetoothApi";
     protected final ContextProvider mContext;
     protected final BluetoothAdapter mAdapter;
 
@@ -42,6 +44,7 @@ public class BluetoothApi {
         return new Func1<Intent, Boolean>() {
             @Override
             public Boolean call(Intent intent) {
+                Log.d(TAG, "filterState: " + intent.getIntExtra(EXTRA_STATE, -1));
                 return intent.getIntExtra(EXTRA_STATE, -1) == state;
             }
         };

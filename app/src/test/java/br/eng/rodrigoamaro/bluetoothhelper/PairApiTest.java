@@ -72,6 +72,8 @@ public class PairApiTest {
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
+        sendDeviceBounded(device, "PAX-12345678", MAC_ADDRESS_1);
+        subscriber.awaitTerminalEvent();
         verify(mPairingSystem).pair(eq(device));
     }
 

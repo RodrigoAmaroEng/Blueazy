@@ -1,6 +1,6 @@
 package br.eng.rodrigoamaro.bluetoothhelper;
 
-import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.Build;
 import android.os.Looper;
@@ -41,13 +41,12 @@ public class RealPairTest {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             Looper.prepare();
         }
-        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-        PairApi api = new PairApi(appContext, adapter, new PairingSystem());
+        PairRequest request = new PairRequest(MAC_D200, appContext);
         final CountDownLatch semaphore = new CountDownLatch(1);
-        api.pair(MAC_MP10)
+        request.perform()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
-                .subscribe(new Subscriber<PairEvent>() {
+                .subscribe(new Subscriber<BluetoothDevice>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "Pair completed");
@@ -61,7 +60,7 @@ public class RealPairTest {
                     }
 
                     @Override
-                    public void onNext(PairEvent device) {
+                    public void onNext(BluetoothDevice device) {
 
                     }
                 });

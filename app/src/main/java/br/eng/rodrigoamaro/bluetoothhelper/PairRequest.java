@@ -11,7 +11,6 @@ import static br.eng.rodrigoamaro.bluetoothhelper.PairApi.ACTION_PAIRING_NOT_DON
 import static br.eng.rodrigoamaro.bluetoothhelper.PairApi.ACTION_PAIRING_ON_PROGRESS;
 
 public class PairRequest {
-
     private final PairEngine mEngine;
     private final Timer mTimer;
     private final String mMacAddress;
