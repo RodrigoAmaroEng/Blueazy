@@ -93,7 +93,7 @@ public class PairApi extends BluetoothApi {
             @Override
             public Observable<Intent> call(Intent intent) {
                 final String action = intent.getAction();
-                if (ACTION_PAIRING_FAILED.equals(action)) {
+                if (ACTION_PAIRING_FAILED.equals(action) || ACTION_ACL_DISCONNECTED.equals(action)) {
                     return Observable.error(new DevicePairingFailed());
                 } else if (ACTION_PAIRING_TIMEOUT.equals(action)) {
                     return Observable.error(new DevicePairingTimeout());
@@ -108,11 +108,17 @@ public class PairApi extends BluetoothApi {
             @Override
             public PairEvent call(Intent intent) {
                 final int state = intent.getIntExtra(EXTRA_BOND_STATE, -1);
+                final String action = intent.getAction();
                 BluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
-                if (state == BOND_BONDED) {
-                    return new PairEvent(ACTION_PAIRING_SUCCEEDED, device);
-                } else if (state == BOND_NONE) {
-                    return new PairEvent(ACTION_PAIRING_NOT_DONE, device);
+                if (ACTION_BOND_STATE_CHANGED.equals(action)) {
+                    if (state == BOND_BONDED) {
+                        return new PairEvent(ACTION_PAIRING_SUCCEEDED, device);
+                    } else if (state == BOND_NONE) {
+                        return new PairEvent(ACTION_PAIRING_NOT_DONE, device);
+                    }
+                } else if (ACTION_FAKE_PAIR_REQUEST.equals(action) ||
+                        ACTION_ACL_CONNECTED.equals(action)) {
+                    return new PairEvent(ACTION_PAIRING_ON_PROGRESS, device);
                 }
                 return null;
             }

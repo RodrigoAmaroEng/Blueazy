@@ -19,9 +19,13 @@ import org.robolectric.shadows.ShadowLog;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 
+import static android.bluetooth.BluetoothDevice.ACTION_ACL_CONNECTED;
+import static android.bluetooth.BluetoothDevice.ACTION_ACL_DISCONNECTED;
 import static android.bluetooth.BluetoothDevice.ACTION_BOND_STATE_CHANGED;
 import static android.bluetooth.BluetoothDevice.BOND_BONDED;
 import static android.bluetooth.BluetoothDevice.BOND_NONE;
+import static br.eng.rodrigoamaro.bluetoothhelper.PairApi.ACTION_FAKE_PAIR_REQUEST;
+import static br.eng.rodrigoamaro.bluetoothhelper.PairApi.ACTION_PAIRING_ON_PROGRESS;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
@@ -173,6 +177,51 @@ public class PairApiTest {
         api.sendErrorMessage(MAC_ADDRESS_1);
         subscriber.awaitTerminalEvent();
         subscriber.assertError(DevicePairingFailed.class);
+    }
+
+    @Test
+    public void translateDisconnectMessageAsError() throws Exception {
+        PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
+        Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
+        TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
+        observable.subscribe(subscriber);
+        sendDisconnectMessage(mock(BluetoothDevice.class), MAC_ADDRESS_1);
+        subscriber.assertNoValues();
+        subscriber.assertError(DevicePairingFailed.class);
+    }
+
+    @Test
+    public void translatePairingRequestMessageAsOnProgress() throws Exception {
+        BluetoothDevice device = mock(BluetoothDevice.class);
+        PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
+        Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
+        TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
+        observable.subscribe(subscriber);
+        sendPairRequestMessage(device, MAC_ADDRESS_1);
+        subscriber.assertValue(new PairEvent(ACTION_PAIRING_ON_PROGRESS, device));
+    }
+
+    @Test
+    public void translateConnectedMessageAsOnProgress() throws Exception {
+        BluetoothDevice device = mock(BluetoothDevice.class);
+        PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
+        Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
+        TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
+        observable.subscribe(subscriber);
+        sendConnectedMessage(device, MAC_ADDRESS_1);
+        subscriber.assertValue(new PairEvent(ACTION_PAIRING_ON_PROGRESS, device));
+    }
+
+    private void sendConnectedMessage(BluetoothDevice device, String macAddress) {
+        sendBroadcastMessage(device, "", macAddress, -1, ACTION_ACL_CONNECTED);
+    }
+
+    private void sendPairRequestMessage(BluetoothDevice device, String macAddress) {
+        sendBroadcastMessage(device, "", macAddress, -1, ACTION_FAKE_PAIR_REQUEST);
+    }
+
+    private void sendDisconnectMessage(BluetoothDevice device, String macAddress) {
+        sendBroadcastMessage(device, "", macAddress, -1, ACTION_ACL_DISCONNECTED);
     }
 
     // TODO: Parar possível busca em andamento antes de parear (Talvez não seja aqui)
