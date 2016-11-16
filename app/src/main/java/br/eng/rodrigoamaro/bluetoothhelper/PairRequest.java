@@ -31,7 +31,7 @@ public class PairRequest {
     }
 
     public Observable<BluetoothDevice> perform() {
-        TimerOperation operation = mTimer.countForSeconds(25, mTimeoutListener);
+        TimerOperation operation = mTimer.countForSeconds(15, mTimeoutListener);
         return mEngine.pair(mMacAddress)
                 .filter(detectError(operation))
                 .map(extractDevice())
