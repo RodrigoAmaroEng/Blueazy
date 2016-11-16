@@ -118,11 +118,6 @@ public class PairRequestTest {
         verify(mOperation).incrementBy(eq(5));
     }
 
-    // TODO: Temos que fazer testes que usam as diversas respostas que podem vir
-    // TODO: Evento de falha
-    // TODO: Evento de erro no pareamento
-    // TODO: Evento de timeout
-
     private void setTimerEndImmediately() {
         doAnswer(
                 new Answer() {

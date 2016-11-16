@@ -178,7 +178,7 @@ public class PairApiTest {
     // TODO: Parar possível busca em andamento antes de parear (Talvez não seja aqui)
 
     /**
-     * TODO: O código abaixo parece fornecer uma solução para o problema do pareamento (API 19+)
+     * O código abaixo parece fornecer uma solução para o problema do pareamento (API 19+)
      * <p>
      * Intent pairingIntent = new Intent(BluetoothDevice.ACTION_PAIRING_REQUEST);
      * pairingIntent.putExtra(BluetoothDevice.EXTRA_DEVICE, device);
