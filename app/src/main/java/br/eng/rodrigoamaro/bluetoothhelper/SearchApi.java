@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import rx.Observable;
+import rx.functions.Func0;
 import rx.functions.Func1;
 
 import static android.bluetooth.BluetoothAdapter.ACTION_DISCOVERY_FINISHED;
@@ -27,14 +28,25 @@ public class SearchApi extends BluetoothApi {
 
     public Observable<SearchEvent> search() {
         mStopRequested = false;
-        mAdapter.startDiscovery();
         IntentFilter intentFilter = new IntentFilter(ACTION_DISCOVERY_STARTED);
         intentFilter.addAction(ACTION_DISCOVERY_FINISHED);
         intentFilter.addAction(ACTION_FOUND);
-        return RxBroadcast.fromShortBroadcast(mContext.getContext(), intentFilter, detectEndOfSearch())
+        return RxBroadcast.fromShortBroadcast(mContext.getContext(), intentFilter,
+                detectEndOfSearch(), startSearch())
                 .map(extractEvent())
                 .filter(RxUtils.discardNulls());
     }
+
+    private Func0<Observable<Intent>> startSearch() {
+        return new Func0<Observable<Intent>>() {
+            @Override
+            public Observable<Intent> call() {
+                mAdapter.startDiscovery();
+                return Observable.empty();
+            }
+        };
+    }
+
 
     private Func1<Intent, Boolean> detectEndOfSearch() {
         return new Func1<Intent, Boolean>() {

@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.util.Log;
 
 import rx.Observable;
+import rx.functions.Func0;
 import rx.functions.Func1;
 
 import static android.bluetooth.BluetoothAdapter.EXTRA_STATE;
@@ -23,21 +24,41 @@ public class BluetoothApi {
     }
 
     public Observable<Intent> turnBluetoothOn() {
-        mAdapter.enable();
         IntentFilter intentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        return RxBroadcast.fromShortBroadcast(mContext.getContext(), intentFilter, filterState(STATE_ON))
+        return RxBroadcast.fromShortBroadcast(mContext.getContext(), intentFilter,
+                filterState(STATE_ON), turnOn())
                 .ignoreElements();
     }
 
     public Observable<Intent> turnBluetoothOff() {
-        mAdapter.disable();
         IntentFilter intentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        return RxBroadcast.fromShortBroadcast(mContext.getContext(), intentFilter, filterState(STATE_OFF))
+        return RxBroadcast.fromShortBroadcast(mContext.getContext(), intentFilter,
+                filterState(STATE_OFF), turnOff())
                 .ignoreElements();
     }
 
     public boolean isBluetoothOn() {
         return mAdapter.isEnabled();
+    }
+
+    private Func0<Observable<Intent>> turnOn() {
+        return new Func0<Observable<Intent>>() {
+            @Override
+            public Observable<Intent> call() {
+                mAdapter.enable();
+                return Observable.empty();
+            }
+        };
+    }
+
+    private Func0<Observable<Intent>> turnOff() {
+        return new Func0<Observable<Intent>>() {
+            @Override
+            public Observable<Intent> call() {
+                mAdapter.disable();
+                return Observable.empty();
+            }
+        };
     }
 
     private Func1<Intent, Boolean> filterState(final int state) {

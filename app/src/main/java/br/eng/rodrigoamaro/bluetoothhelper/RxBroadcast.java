@@ -43,13 +43,17 @@ public final class RxBroadcast {
     }
 
 
-    public static Observable<Intent> fromShortBroadcast(final Context context,
-                                                        final IntentFilter filter,
-                                                        final Func1<Intent, Boolean> condition) {
+    public static Observable<Intent> fromShortBroadcast(
+            final Context context,
+            final IntentFilter filter,
+            final Func1<Intent, Boolean> condition,
+            final Func0<Observable<Intent>> startingOperation) {
         return Observable.create(new Observable.OnSubscribe<Intent>() {
 
             @Override
             public void call(final Subscriber<? super Intent> subscriber) {
+                startingOperation.call().subscribe(RxBroadcast.<Intent>emptyAction(),
+                        propagateErrorTo(subscriber));
                 final BroadcastReceiver receiver = new BroadcastReceiver() {
 
                     @Override

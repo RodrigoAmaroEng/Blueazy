@@ -148,7 +148,7 @@ public class SearchApiTest {
     @Test
     public void turnBluetoothOnMustCallItOnAdapter() {
         SearchApi eventHandler = new SearchApi(mContextProvider, mAdapter);
-        eventHandler.turnBluetoothOn();
+        eventHandler.turnBluetoothOn().subscribe();
         verify(mAdapter).enable();
     }
 
@@ -177,7 +177,7 @@ public class SearchApiTest {
     @Test
     public void turnBluetoothOffMustCallItOnAdapter() {
         SearchApi eventHandler = new SearchApi(mContextProvider, mAdapter);
-        eventHandler.turnBluetoothOff();
+        eventHandler.turnBluetoothOff().subscribe();
         verify(mAdapter).disable();
     }
 
