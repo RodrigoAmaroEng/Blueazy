@@ -22,7 +22,7 @@ import static android.bluetooth.BluetoothDevice.EXTRA_DEVICE;
 public class PairApi extends BluetoothApi {
 
     private static final String TAG = "PairApi";
-    private static final String FAKE_ACTION_PAIR_REQUEST = "android.bluetooth.device.action.PAIRING_REQUEST";
+    public static final String ACTION_FAKE_PAIR_REQUEST = "android.bluetooth.device.action.PAIRING_REQUEST";
     public static final String ACTION_PAIRING_SUCCEEDED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_SUCCEEDED";
     public static final String ACTION_PAIRING_TIMEOUT = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_TIMEOUT";
     public static final String ACTION_PAIRING_FAILED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_FAILED";
@@ -42,12 +42,13 @@ public class PairApi extends BluetoothApi {
             IntentFilter intentFilter = new IntentFilter(ACTION_BOND_STATE_CHANGED);
             intentFilter.addAction(ACTION_ACL_CONNECTED);
             intentFilter.addAction(ACTION_ACL_DISCONNECTED);
-            intentFilter.addAction(FAKE_ACTION_PAIR_REQUEST);
+            intentFilter.addAction(ACTION_FAKE_PAIR_REQUEST);
             intentFilter.addAction(ACTION_PAIRING_FAILED);
             intentFilter.addAction(ACTION_PAIRING_TIMEOUT);
             return RxBroadcast.fromShortBroadcastInclusive(mContext, intentFilter, detectPairCompleted(macAddress))
-                    .flatMap(detectError(macAddress))
-                    .map(extractEvent(macAddress))
+                    .filter(onlyEventsForThisDevice(macAddress))
+                    .flatMap(detectError())
+                    .map(extractEvent())
                     .filter(RxUtils.discardNulls());
         } catch (DevicePairingFailed devicePairingFailed) {
             return Observable.error(devicePairingFailed);
@@ -55,38 +56,41 @@ public class PairApi extends BluetoothApi {
 
     }
 
-    private Func1<Intent, Observable<Intent>> detectError(final String macAddress) {
+    private Func1<? super Intent, Boolean> onlyEventsForThisDevice(final String macAddress) {
+        return new Func1<Intent, Boolean>() {
+            @Override
+            public Boolean call(Intent intent) {
+                BluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
+                return macAddress.equals(device.getAddress());
+            }
+        };
+    }
+
+    private Func1<Intent, Observable<Intent>> detectError() {
         return new Func1<Intent, Observable<Intent>>() {
             @Override
             public Observable<Intent> call(Intent intent) {
                 final String action = intent.getAction();
-                BluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
-                if (macAddress.equals(device.getAddress())) {
-                    if (ACTION_PAIRING_FAILED.equals(action)) {
-                        return Observable.error(new DevicePairingFailed());
-                    } else if (ACTION_PAIRING_TIMEOUT.equals(action)) {
-                        return Observable.error(new DevicePairingTimeout());
-                    }
+                if (ACTION_PAIRING_FAILED.equals(action)) {
+                    return Observable.error(new DevicePairingFailed());
+                } else if (ACTION_PAIRING_TIMEOUT.equals(action)) {
+                    return Observable.error(new DevicePairingTimeout());
                 }
                 return Observable.just(intent);
             }
         };
     }
 
-    private Func1<Intent, PairEvent> extractEvent(final String macAddress) {
+    private Func1<Intent, PairEvent> extractEvent() {
         return new Func1<Intent, PairEvent>() {
             @Override
             public PairEvent call(Intent intent) {
                 final int state = intent.getIntExtra(EXTRA_BOND_STATE, -1);
-                final String action = intent.getAction();
                 BluetoothDevice device = intent.getParcelableExtra(EXTRA_DEVICE);
-                log(state, action, device);
-                if (macAddress.equals(device.getAddress())) {
-                    if (state == BOND_BONDED) {
-                        return new PairEvent(ACTION_PAIRING_SUCCEEDED, device);
-                    } else if (state == BOND_NONE) {
-                        return new PairEvent(ACTION_PAIRING_NOT_DONE, device);
-                    }
+                if (state == BOND_BONDED) {
+                    return new PairEvent(ACTION_PAIRING_SUCCEEDED, device);
+                } else if (state == BOND_NONE) {
+                    return new PairEvent(ACTION_PAIRING_NOT_DONE, device);
                 }
                 return null;
             }
