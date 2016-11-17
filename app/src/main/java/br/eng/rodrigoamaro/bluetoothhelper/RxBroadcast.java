@@ -7,6 +7,10 @@ import android.content.IntentFilter;
 import android.os.Looper;
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import rx.Observable;
 import rx.Scheduler;
 import rx.Subscriber;
@@ -21,6 +25,116 @@ import rx.subscriptions.Subscriptions;
 public final class RxBroadcast {
 
     private static final String TAG = "RxBroadcast";
+
+    public static class Builder {
+
+        private final Context mContext;
+        private final Set<String> mFilters = new HashSet<>();
+        private boolean mIncludeExitConditionEvent = false;
+        private Func1<Intent, Boolean> mExitCondition;
+        private Func0<Observable<Intent>> mStartOperation;
+
+        public Builder(Context context) {
+            mContext = context;
+        }
+
+        public Builder addFilter(String intentAction) {
+            mFilters.add(intentAction);
+            return this;
+        }
+
+        public Builder addFilters(String... intentActions) {
+            Collections.addAll(mFilters, intentActions);
+            return this;
+        }
+
+        public Builder setIncludeExitConditionEvent() {
+            mIncludeExitConditionEvent = true;
+            return this;
+        }
+
+        public Builder setExitCondition(Func1<Intent, Boolean> condition) {
+            mExitCondition = condition;
+            return this;
+        }
+
+        public Builder setStartOperation(Func0<Observable<Intent>> operation) {
+            mStartOperation = operation;
+            return this;
+        }
+
+        public Observable<Intent> build() {
+            final IntentFilter filter = new IntentFilter();
+            for (String action : mFilters) {
+                filter.addAction(action);
+            }
+            return Observable.create(new Observable.OnSubscribe<Intent>() {
+
+                @Override
+                public void call(final Subscriber<? super Intent> subscriber) {
+                    if (hasStartingOperation()) {
+                        mStartOperation.call().subscribe(propagateItemTo(subscriber),
+                                propagateErrorTo(subscriber));
+                    }
+                    final BroadcastReceiver receiver = new BroadcastReceiver() {
+
+                        @Override
+                        public void onReceive(Context c, Intent intent) {
+                            if (hasCondition()) {
+                                Boolean isCompleted = mExitCondition.call(intent);
+                                if (hasToIncludeExitConditionEvent()) {
+                                    subscriber.onNext(intent);
+                                }
+                                if (isCompleted) {
+                                    unregister(this);
+                                    subscriber.onCompleted();
+                                } else if (!hasToIncludeExitConditionEvent()) {
+                                    subscriber.onNext(intent);
+                                }
+                            } else {
+                                subscriber.onNext(intent);
+                            }
+                        }
+
+                    };
+                    register(receiver);
+                    subscriber.add(unsubscribeInUiThread(new Action0() {
+                        @Override
+                        public void call() {
+                            unregister(receiver);
+                        }
+                    }));
+                }
+
+                boolean registered;
+
+                void register(BroadcastReceiver receiver) {
+                    mContext.registerReceiver(receiver, filter);
+                    registered = true;
+                }
+
+                void unregister(BroadcastReceiver receiver) {
+                    if (registered) {
+                        mContext.unregisterReceiver(receiver);
+                        registered = false;
+                    }
+                }
+            });
+        }
+
+        private boolean hasToIncludeExitConditionEvent() {
+            return mIncludeExitConditionEvent;
+        }
+
+        private boolean hasCondition() {
+            return mExitCondition != null;
+        }
+
+        private boolean hasStartingOperation() {
+            return mStartOperation != null;
+        }
+
+    }
 
     public static Subscription unsubscribeInUiThread(final Action0 unsubscribe) {
         return Subscriptions.create(new Action0() {
@@ -146,39 +260,6 @@ public final class RxBroadcast {
                 }
             }
         });
-    }
-
-    public static Observable<Intent> fromBroadcast(final Context context, final IntentFilter filter) {
-        return Observable.create(new Observable.OnSubscribe<Intent>() {
-
-            @Override
-            public void call(final Subscriber<? super Intent> subscriber) {
-                final BroadcastReceiver receiver = new BroadcastReceiver() {
-
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        subscriber.onNext(intent);
-                    }
-
-                };
-                context.registerReceiver(receiver, filter);
-                subscriber.add(unsubscribeInUiThread(new Action0() {
-
-                    @Override
-                    public void call() {
-                        context.unregisterReceiver(receiver);
-                    }
-                }));
-            }
-        });
-    }
-
-    private static <T> Action1<T> emptyAction() {
-        return new Action1<T>() {
-            @Override
-            public void call(T t) {
-            }
-        };
     }
 
     private static <T> Action1<T> propagateItemTo(final Subscriber<T> subscriber) {

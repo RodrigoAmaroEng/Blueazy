@@ -4,7 +4,6 @@ package br.eng.rodrigoamaro.bluetoothhelper;
 import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 
 import org.junit.Assert;
@@ -33,29 +32,45 @@ public class Api {
     }
 
     public void createRegisterFor(String message, final int completeValue, final int firstValue) {
-        mObservable = RxBroadcast.fromShortBroadcast(mApplication, new IntentFilter(message),
-                checkEqualValue(completeValue), firstAction(message, firstValue))
+        mObservable = new RxBroadcast.Builder(mApplication)
+                .addFilter(message)
+                .setExitCondition(checkEqualValue(completeValue))
+                .setStartOperation(firstAction(message, firstValue))
+                .build()
                 .flatMap(generateErrorOnZeroValue());
     }
 
     public void createRegisterFor(String message, final int completeValue) {
-        mObservable = RxBroadcast.fromShortBroadcast(mApplication, new IntentFilter(message),
-                checkEqualValue(completeValue), emptyAction()).flatMap(generateErrorOnZeroValue());
+        mObservable = new RxBroadcast.Builder(mApplication)
+                .addFilter(message)
+                .setExitCondition(checkEqualValue(completeValue))
+                .build()
+                .flatMap(generateErrorOnZeroValue());
     }
 
     public void createInclusiveRegisterFor(String message, final int completeValue) {
-        mObservable = RxBroadcast.fromShortBroadcastInclusive(mApplication, new IntentFilter(message),
-                checkEqualValue(completeValue), emptyAction()).flatMap(generateErrorOnZeroValue());
+        mObservable = new RxBroadcast.Builder(mApplication)
+                .addFilter(message)
+                .setExitCondition(checkEqualValue(completeValue))
+                .setIncludeExitConditionEvent()
+                .build()
+                .flatMap(generateErrorOnZeroValue());
     }
 
     public void createInclusiveRegisterFor(String message, final int completeValue, final int firstValue) {
-        mObservable = RxBroadcast.fromShortBroadcastInclusive(mApplication, new IntentFilter(message),
-                checkEqualValue(completeValue), firstAction(message, firstValue))
+        mObservable = new RxBroadcast.Builder(mApplication)
+                .addFilter(message)
+                .setExitCondition(checkEqualValue(completeValue))
+                .setStartOperation(firstAction(message, firstValue))
+                .setIncludeExitConditionEvent()
+                .build()
                 .flatMap(generateErrorOnZeroValue());
     }
 
     public void createContinuousRegisterFor(String message) {
-        mObservable = RxBroadcast.fromBroadcast(mApplication, new IntentFilter(message))
+        mObservable = new RxBroadcast.Builder(mApplication)
+                .addFilter(message)
+                .build()
                 .flatMap(generateErrorOnZeroValue());
     }
 
