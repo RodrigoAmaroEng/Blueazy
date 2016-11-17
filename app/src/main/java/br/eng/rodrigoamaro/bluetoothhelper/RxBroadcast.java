@@ -52,7 +52,7 @@ public final class RxBroadcast {
 
             @Override
             public void call(final Subscriber<? super Intent> subscriber) {
-                startingOperation.call().subscribe(RxBroadcast.<Intent>emptyAction(),
+                startingOperation.call().subscribe(propagateItemTo(subscriber),
                         propagateErrorTo(subscriber));
                 final BroadcastReceiver receiver = new BroadcastReceiver() {
 
@@ -105,7 +105,7 @@ public final class RxBroadcast {
 
             @Override
             public void call(final Subscriber<? super Intent> subscriber) {
-                startingOperation.call().subscribe(RxBroadcast.<Intent>emptyAction(),
+                startingOperation.call().subscribe(propagateItemTo(subscriber),
                         propagateErrorTo(subscriber));
                 final BroadcastReceiver receiver = new BroadcastReceiver() {
 
@@ -177,6 +177,15 @@ public final class RxBroadcast {
         return new Action1<T>() {
             @Override
             public void call(T t) {
+            }
+        };
+    }
+
+    private static <T> Action1<T> propagateItemTo(final Subscriber<T> subscriber) {
+        return new Action1<T>() {
+            @Override
+            public void call(T item) {
+                subscriber.onNext(item);
             }
         };
     }
