@@ -47,8 +47,21 @@ public class PairApi extends BluetoothApi {
     }
 
     public Observable<PairEvent> pair(String macAddress) {
-
-
+//        return new RxBroadcast.Builder(mContext.getContext())
+//                .addFilter(ACTION_BOND_STATE_CHANGED)
+//                .addFilter(ACTION_ACL_CONNECTED)
+//                .addFilter(ACTION_ACL_DISCONNECTED)
+//                .addFilter(ACTION_FAKE_PAIR_REQUEST)
+//                .addFilter(ACTION_PAIRING_FAILED)
+//                .addFilter(ACTION_PAIRING_TIMEOUT)
+//                .setIncludeExitConditionEvent()
+//                .setStartOperation(startPairProcess(macAddress))
+//                .setExitCondition(detectPairCompleted(macAddress))
+//                .build()
+//                .filter(onlyEventsForThisDevice(macAddress))
+//                .flatMap(detectError())
+//                .map(extractEvent())
+//                .filter(RxUtils.discardNulls());
         IntentFilter intentFilter = new IntentFilter(ACTION_BOND_STATE_CHANGED);
         intentFilter.addAction(ACTION_ACL_CONNECTED);
         intentFilter.addAction(ACTION_ACL_DISCONNECTED);
@@ -71,7 +84,14 @@ public class PairApi extends BluetoothApi {
                 try {
                     // The method getRemoteDevice will always return a Device even if it doesn't exists
                     // https://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html#getRemoteDevice
-                    mPairingSystem.pair(mAdapter.getRemoteDevice(macAddress));
+                    BluetoothDevice device = mAdapter.getRemoteDevice(macAddress);
+                    if (device.getBondState() == BOND_BONDED) {
+                        Intent intent = new Intent(ACTION_BOND_STATE_CHANGED);
+                        intent.putExtra(EXTRA_DEVICE, device);
+                        intent.putExtra(EXTRA_BOND_STATE, BOND_BONDED);
+                        return Observable.just(intent);
+                    }
+                    mPairingSystem.pair(device);
                     return Observable.empty();
                 } catch (DevicePairingFailed devicePairingFailed) {
                     return Observable.error(devicePairingFailed);
