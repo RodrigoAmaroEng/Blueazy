@@ -49,18 +49,18 @@ public class PairApi extends BluetoothApi {
     public Observable<PairEvent> pair(String macAddress) {
 
 
-            IntentFilter intentFilter = new IntentFilter(ACTION_BOND_STATE_CHANGED);
-            intentFilter.addAction(ACTION_ACL_CONNECTED);
-            intentFilter.addAction(ACTION_ACL_DISCONNECTED);
-            intentFilter.addAction(ACTION_FAKE_PAIR_REQUEST);
-            intentFilter.addAction(ACTION_PAIRING_FAILED);
-            intentFilter.addAction(ACTION_PAIRING_TIMEOUT);
-            return RxBroadcast.fromShortBroadcastInclusive(mContext.getContext(), intentFilter,
-                    detectPairCompleted(macAddress), startPairProcess(macAddress))
-                    .filter(onlyEventsForThisDevice(macAddress))
-                    .flatMap(detectError())
-                    .map(extractEvent())
-                    .filter(RxUtils.discardNulls());
+        IntentFilter intentFilter = new IntentFilter(ACTION_BOND_STATE_CHANGED);
+        intentFilter.addAction(ACTION_ACL_CONNECTED);
+        intentFilter.addAction(ACTION_ACL_DISCONNECTED);
+        intentFilter.addAction(ACTION_FAKE_PAIR_REQUEST);
+        intentFilter.addAction(ACTION_PAIRING_FAILED);
+        intentFilter.addAction(ACTION_PAIRING_TIMEOUT);
+        return RxBroadcast.fromShortBroadcastInclusive(mContext.getContext(), intentFilter,
+                detectPairCompleted(macAddress), startPairProcess(macAddress))
+                .filter(onlyEventsForThisDevice(macAddress))
+                .flatMap(detectError())
+                .map(extractEvent())
+                .filter(RxUtils.discardNulls());
 
     }
 
@@ -111,6 +111,7 @@ public class PairApi extends BluetoothApi {
                 if (ACTION_PAIRING_FAILED.equals(action) || ACTION_ACL_DISCONNECTED.equals(action)) {
                     return Observable.error(new DevicePairingFailed());
                 } else if (ACTION_PAIRING_TIMEOUT.equals(action)) {
+                    mPairingSystem.cancelPairRequest(mContext.getContext());
                     return Observable.error(new DevicePairingTimeout());
                 }
                 return Observable.just(intent);

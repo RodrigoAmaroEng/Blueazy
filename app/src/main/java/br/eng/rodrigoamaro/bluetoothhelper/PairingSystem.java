@@ -3,6 +3,8 @@ package br.eng.rodrigoamaro.bluetoothhelper;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import java.io.IOException;
@@ -34,6 +36,9 @@ public class PairingSystem {
         }
     }
 
+    public void cancelPairRequest(Context context) {
+        context.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+    }
 
     private void pairRfComm(BluetoothDevice device) {
         try {
