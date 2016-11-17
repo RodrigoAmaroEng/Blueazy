@@ -1,6 +1,5 @@
 package br.eng.rodrigoamaro.bluetoothhelper;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -31,18 +30,18 @@ public class RxBroadcastTest {
 
         mApi.assertNoValueReceived();
         mApi.assertError();
-        mApi.assertReceiverWasUnregistered();
+        mApi.assertReceiverWasNotRegistered();
     }
 
     @Test
-    @Ignore
     public void registerExecuteSomethingFirstThatReturnsValue() throws Exception {
         mApi.createRegisterFor("MESSAGE_1", 4, 1);
         mApi.subscribe();
 
         mApi.assertValues(1);
-        mApi.assertCompleted();
-        mApi.assertReceiverWasUnregistered();
+        mApi.assertNotCompleted();
+        mApi.assertReceiverWasRegistered();
+
     }
 
     @Test
@@ -80,13 +79,23 @@ public class RxBroadcastTest {
     }
 
     @Test
+    public void registerExecuteSomethingFirstThatReturnsValueIncludingTheClosingEvent() throws Exception {
+        mApi.createInclusiveRegisterFor("MESSAGE_1", 4, 4);
+        mApi.subscribe();
+
+        mApi.assertValues(4);
+        mApi.assertCompleted();
+        mApi.assertReceiverWasNotRegistered();
+    }
+
+    @Test
     public void registerExecuteSomethingFirstThatFailsIncludingMode() throws Exception {
         mApi.createInclusiveRegisterFor("MESSAGE_1", 4, 0);
         mApi.subscribe();
 
         mApi.assertNoValueReceived();
         mApi.assertError();
-        mApi.assertReceiverWasUnregistered();
+        mApi.assertReceiverWasNotRegistered();
     }
 
     @Test
@@ -133,6 +142,27 @@ public class RxBroadcastTest {
         mApi.assertNoValueReceived();
         mApi.assertError();
         mApi.assertReceiverWasUnregistered();
+    }
+
+    @Test
+    public void registerDoSomethingThatReturnsValueFirstWaitAndDoNotComplete() throws Exception {
+        mApi.createContinuousRegisterFor("MESSAGE_1", 4);
+        mApi.subscribe();
+
+        mApi.assertValues(4);
+        mApi.assertNotCompleted();
+        mApi.assertReceiverWasRegistered();
+        mApi.assertReceiverWasNotUnregistered();
+    }
+
+    @Test
+    public void registerDoSomethingThatFailsFirst() throws Exception {
+        mApi.createContinuousRegisterFor("MESSAGE_1", 0);
+        mApi.subscribe();
+
+        mApi.assertNoValueReceived();
+        mApi.assertError();
+        mApi.assertReceiverWasNotRegistered();
     }
 
 

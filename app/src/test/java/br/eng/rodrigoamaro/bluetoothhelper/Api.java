@@ -4,6 +4,7 @@ package br.eng.rodrigoamaro.bluetoothhelper;
 import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 
 import org.junit.Assert;
@@ -74,6 +75,14 @@ public class Api {
                 .flatMap(generateErrorOnZeroValue());
     }
 
+    public void createContinuousRegisterFor(String message, int firstValue) {
+        mObservable = new RxBroadcast.Builder(mApplication)
+                .addFilter(message)
+                .setStartOperation(firstAction(message, firstValue))
+                .build()
+                .flatMap(generateErrorOnZeroValue());
+    }
+
     @NonNull
     private Func0<Observable<Intent>> firstAction(final String message, final int value) {
         return new Func0<Observable<Intent>>() {
@@ -89,15 +98,6 @@ public class Api {
         };
     }
 
-    @NonNull
-    private Func0<Observable<Intent>> emptyAction() {
-        return new Func0<Observable<Intent>>() {
-            @Override
-            public Observable<Intent> call() {
-                return Observable.empty();
-            }
-        };
-    }
 
     @NonNull
     private Func1<Intent, Boolean> checkEqualValue(final int completeValue) {
@@ -161,5 +161,13 @@ public class Api {
 
     public void assertReceiverWasNotUnregistered() {
         verify(mApplication, never()).unregisterReceiver(any(BroadcastReceiver.class));
+    }
+
+    public void assertReceiverWasNotRegistered() {
+        verify(mApplication, never()).registerReceiver(any(BroadcastReceiver.class), any(IntentFilter.class));
+    }
+
+    public void assertReceiverWasRegistered() {
+        verify(mApplication).registerReceiver(any(BroadcastReceiver.class), any(IntentFilter.class));
     }
 }
