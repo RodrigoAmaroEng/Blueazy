@@ -41,7 +41,17 @@ public class RxBroadcastTest {
         mApi.assertValues(1);
         mApi.assertNotCompleted();
         mApi.assertReceiverWasRegistered();
+    }
 
+    @Test
+    public void registerExecuteSomethingFirstThatReturnsNothingAndWaitToReceive() throws Exception {
+        mApi.createRegisterFor("MESSAGE_1", 4, -1);
+        mApi.subscribe();
+        mBroadcaster.sendMessage("MESSAGE_1", 3);
+
+        mApi.assertValues(3);
+        mApi.assertNotCompleted();
+        mApi.assertReceiverWasRegistered();
     }
 
     @Test

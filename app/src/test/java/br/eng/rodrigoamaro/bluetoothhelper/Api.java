@@ -90,6 +90,8 @@ public class Api {
             public Observable<Intent> call() {
                 if (value == 0) {
                     return Observable.error(new Exception());
+                } else if (value == -1) {
+                    return Observable.empty();
                 }
                 Intent intent = new Intent(message);
                 intent.putExtra(VALUE, value);

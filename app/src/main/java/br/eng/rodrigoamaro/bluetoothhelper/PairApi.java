@@ -3,7 +3,6 @@ package br.eng.rodrigoamaro.bluetoothhelper;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.util.Log;
 
 import rx.Observable;
@@ -47,33 +46,29 @@ public class PairApi extends BluetoothApi {
     }
 
     public Observable<PairEvent> pair(String macAddress) {
-//        return new RxBroadcast.Builder(mContext.getContext())
-//                .addFilter(ACTION_BOND_STATE_CHANGED)
-//                .addFilter(ACTION_ACL_CONNECTED)
-//                .addFilter(ACTION_ACL_DISCONNECTED)
-//                .addFilter(ACTION_FAKE_PAIR_REQUEST)
-//                .addFilter(ACTION_PAIRING_FAILED)
-//                .addFilter(ACTION_PAIRING_TIMEOUT)
-//                .setIncludeExitConditionEvent()
-//                .setStartOperation(startPairProcess(macAddress))
-//                .setExitCondition(detectPairCompleted(macAddress))
-//                .build()
-//                .filter(onlyEventsForThisDevice(macAddress))
-//                .flatMap(detectError())
-//                .map(extractEvent())
-//                .filter(RxUtils.discardNulls());
-        IntentFilter intentFilter = new IntentFilter(ACTION_BOND_STATE_CHANGED);
-        intentFilter.addAction(ACTION_ACL_CONNECTED);
-        intentFilter.addAction(ACTION_ACL_DISCONNECTED);
-        intentFilter.addAction(ACTION_FAKE_PAIR_REQUEST);
-        intentFilter.addAction(ACTION_PAIRING_FAILED);
-        intentFilter.addAction(ACTION_PAIRING_TIMEOUT);
-        return RxBroadcast.fromShortBroadcastInclusive(mContext.getContext(), intentFilter,
-                detectPairCompleted(macAddress), startPairProcess(macAddress))
+        return new RxBroadcast.Builder(mContext.getContext())
+                .addFilters(ACTION_BOND_STATE_CHANGED, ACTION_ACL_CONNECTED, ACTION_ACL_DISCONNECTED
+                        , ACTION_FAKE_PAIR_REQUEST, ACTION_PAIRING_FAILED, ACTION_PAIRING_TIMEOUT)
+                .setIncludeExitConditionEvent()
+                .setStartOperation(startPairProcess(macAddress))
+                .setExitCondition(detectPairCompleted(macAddress))
+                .build()
                 .filter(onlyEventsForThisDevice(macAddress))
                 .flatMap(detectError())
                 .map(extractEvent())
                 .filter(RxUtils.discardNulls());
+//        IntentFilter intentFilter = new IntentFilter(ACTION_BOND_STATE_CHANGED);
+//        intentFilter.addAction(ACTION_ACL_CONNECTED);
+//        intentFilter.addAction(ACTION_ACL_DISCONNECTED);
+//        intentFilter.addAction(ACTION_FAKE_PAIR_REQUEST);
+//        intentFilter.addAction(ACTION_PAIRING_FAILED);
+//        intentFilter.addAction(ACTION_PAIRING_TIMEOUT);
+//        return RxBroadcast.fromShortBroadcastInclusive(mContext.getContext(), intentFilter,
+//                detectPairCompleted(macAddress), startPairProcess(macAddress))
+//                .filter(onlyEventsForThisDevice(macAddress))
+//                .flatMap(detectError())
+//                .map(extractEvent())
+//                .filter(RxUtils.discardNulls());
 
     }
 
@@ -82,6 +77,7 @@ public class PairApi extends BluetoothApi {
             @Override
             public Observable<Intent> call() {
                 try {
+
                     // The method getRemoteDevice will always return a Device even if it doesn't exists
                     // https://developer.android.com/reference/android/bluetooth/BluetoothAdapter.html#getRemoteDevice
                     BluetoothDevice device = mAdapter.getRemoteDevice(macAddress);
@@ -89,11 +85,14 @@ public class PairApi extends BluetoothApi {
                         Intent intent = new Intent(ACTION_BOND_STATE_CHANGED);
                         intent.putExtra(EXTRA_DEVICE, device);
                         intent.putExtra(EXTRA_BOND_STATE, BOND_BONDED);
+                        Log.d(TAG, "Returning paired device");
                         return Observable.just(intent);
                     }
+                    Log.d(TAG, "Start pair");
                     mPairingSystem.pair(device);
                     return Observable.empty();
                 } catch (DevicePairingFailed devicePairingFailed) {
+                    Log.d(TAG, "Error on pair");
                     return Observable.error(devicePairingFailed);
                 }
             }
