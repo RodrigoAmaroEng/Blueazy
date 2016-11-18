@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +27,7 @@ import static android.bluetooth.BluetoothDevice.BOND_BONDED;
 import static android.bluetooth.BluetoothDevice.BOND_NONE;
 import static br.eng.rodrigoamaro.bluetoothhelper.PairApi.ACTION_FAKE_PAIR_REQUEST;
 import static br.eng.rodrigoamaro.bluetoothhelper.PairApi.ACTION_PAIRING_ON_PROGRESS;
+import static br.eng.rodrigoamaro.bluetoothhelper.PairApi.ACTION_PAIRING_STARTED;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
@@ -95,10 +95,11 @@ public class PairApiTest {
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
-        
+
         sendDeviceBounded(mDevice, "PAX-12345678", MAC_ADDRESS_1);
         subscriber.awaitTerminalEvent();
-        subscriber.assertValue(new PairEvent(PairApi.ACTION_PAIRING_SUCCEEDED, mDevice));
+        subscriber.assertValues(new PairEvent(ACTION_PAIRING_STARTED, mDevice),
+                new PairEvent(PairApi.ACTION_PAIRING_SUCCEEDED, mDevice));
         subscriber.assertCompleted();
     }
 
@@ -108,11 +109,13 @@ public class PairApiTest {
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
-        
+
         sendDeviceNotBounded(mDevice, "PAX-12345678", MAC_ADDRESS_1);
         sendDeviceBounded(mDevice, "PAX-12345678", MAC_ADDRESS_1);
         subscriber.awaitTerminalEvent();
-        subscriber.assertValues(new PairEvent(PairApi.ACTION_PAIRING_NOT_DONE, mDevice),
+        subscriber.assertValues(
+                new PairEvent(ACTION_PAIRING_STARTED, mDevice),
+                new PairEvent(PairApi.ACTION_PAIRING_NOT_DONE, mDevice),
                 new PairEvent(PairApi.ACTION_PAIRING_SUCCEEDED, mDevice));
         subscriber.assertCompleted();
     }
@@ -123,9 +126,9 @@ public class PairApiTest {
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
-        
+
         sendDeviceBounded(mDevice, "PAX-12345678", MAC_ADDRESS_2);
-        subscriber.assertNoValues();
+        subscriber.assertValue(new PairEvent(ACTION_PAIRING_STARTED, mDevice));
         subscriber.assertNotCompleted();
     }
 
@@ -142,6 +145,15 @@ public class PairApiTest {
     }
 
     @Test
+    public void returnMessageInformingPairProcessHasStarted() throws Exception {
+        PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
+        Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
+        TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
+        observable.subscribe(subscriber);
+        subscriber.assertValue(new PairEvent(PairApi.ACTION_PAIRING_STARTED, mDevice));
+    }
+
+    @Test
     public void pairingFailed() throws Exception {
         PairApi api = new PairApi(mContextProvider, mAdapter, mPairingSystem);
         Observable<PairEvent> observable = api.pair(MAC_ADDRESS_1);
@@ -149,7 +161,7 @@ public class PairApiTest {
         observable.subscribe(subscriber);
         sendPairingFailed(mock(BluetoothDevice.class), MAC_ADDRESS_1);
         subscriber.awaitTerminalEvent();
-        subscriber.assertNoValues();
+        subscriber.assertValue(new PairEvent(ACTION_PAIRING_STARTED, mDevice));
         subscriber.assertError(DevicePairingFailed.class);
     }
 
@@ -161,7 +173,7 @@ public class PairApiTest {
         observable.subscribe(subscriber);
         sendTimeout(mock(BluetoothDevice.class), MAC_ADDRESS_1);
         subscriber.awaitTerminalEvent();
-        subscriber.assertNoValues();
+        subscriber.assertValue(new PairEvent(ACTION_PAIRING_STARTED, mDevice));
         subscriber.assertError(DevicePairingTimeout.class);
     }
 
@@ -206,7 +218,7 @@ public class PairApiTest {
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
         sendDisconnectMessage(mock(BluetoothDevice.class), MAC_ADDRESS_1);
-        subscriber.assertNoValues();
+        subscriber.assertValue(new PairEvent(ACTION_PAIRING_STARTED, mDevice));
         subscriber.assertError(DevicePairingFailed.class);
     }
 
@@ -217,7 +229,8 @@ public class PairApiTest {
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
         sendPairRequestMessage(mDevice, MAC_ADDRESS_1);
-        subscriber.assertValue(new PairEvent(ACTION_PAIRING_ON_PROGRESS, mDevice));
+        subscriber.assertValues(new PairEvent(ACTION_PAIRING_STARTED, mDevice),
+                new PairEvent(ACTION_PAIRING_ON_PROGRESS, mDevice));
     }
 
     @Test
@@ -227,7 +240,8 @@ public class PairApiTest {
         TestSubscriber<PairEvent> subscriber = new TestSubscriber<>();
         observable.subscribe(subscriber);
         sendConnectedMessage(mDevice, MAC_ADDRESS_1);
-        subscriber.assertValue(new PairEvent(ACTION_PAIRING_ON_PROGRESS, mDevice));
+        subscriber.assertValues(new PairEvent(ACTION_PAIRING_STARTED, mDevice),
+                new PairEvent(ACTION_PAIRING_ON_PROGRESS, mDevice));
     }
 
     private void sendConnectedMessage(BluetoothDevice device, String macAddress) {

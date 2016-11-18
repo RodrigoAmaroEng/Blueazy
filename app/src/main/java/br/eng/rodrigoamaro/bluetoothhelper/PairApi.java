@@ -22,6 +22,7 @@ public class PairApi extends BluetoothApi {
     private static final String TAG = "PairApi";
     public static final String ACTION_FAKE_PAIR_REQUEST = "android.bluetooth.device.action.PAIRING_REQUEST";
     public static final String ACTION_PAIRING_SUCCEEDED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_SUCCEEDED";
+    public static final String ACTION_PAIRING_STARTED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_SUCCEEDED";
     public static final String ACTION_PAIRING_TIMEOUT = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_TIMEOUT";
     public static final String ACTION_PAIRING_FAILED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_FAILED";
     public static final String ACTION_PAIRING_NOT_DONE = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_NOT_DONE";
@@ -90,7 +91,9 @@ public class PairApi extends BluetoothApi {
                     }
                     Log.d(TAG, "Start pair");
                     mPairingSystem.pair(device);
-                    return Observable.empty();
+                    Intent intent = new Intent(ACTION_PAIRING_STARTED);
+                    intent.putExtra(EXTRA_DEVICE, device);
+                    return Observable.just(intent);
                 } catch (DevicePairingFailed devicePairingFailed) {
                     Log.d(TAG, "Error on pair");
                     return Observable.error(devicePairingFailed);
@@ -151,6 +154,8 @@ public class PairApi extends BluetoothApi {
                     } else if (state == BOND_NONE) {
                         return new PairEvent(ACTION_PAIRING_NOT_DONE, device);
                     }
+                } else if (ACTION_PAIRING_STARTED.equals(action)) {
+                    return new PairEvent(ACTION_PAIRING_STARTED, device);
                 } else if (ACTION_FAKE_PAIR_REQUEST.equals(action) ||
                         ACTION_ACL_CONNECTED.equals(action)) {
                     return new PairEvent(ACTION_PAIRING_ON_PROGRESS, device);
