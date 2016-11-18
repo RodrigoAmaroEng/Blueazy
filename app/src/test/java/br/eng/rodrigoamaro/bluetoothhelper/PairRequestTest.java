@@ -116,7 +116,7 @@ public class PairRequestTest {
         setPairNotDoneAfterRequest(mDevice);
         TestSubscriber<BluetoothDevice> subscriber = new TestSubscriber<>();
         request.perform().subscribe(subscriber);
-        verify(mOperation).incrementBy(eq(10));
+        verify(mOperation).resetTime();
     }
 
     @Test
@@ -145,6 +145,7 @@ public class PairRequestTest {
         doReturn(Observable.just(new PairEvent(PairApi.ACTION_PAIRING_SUCCEEDED, device)))
                 .when(mPairEngine).pair(anyString());
     }
+
     private void setNoStartMessage() {
         doReturn(Observable.empty()).when(mPairEngine).pair(anyString());
     }

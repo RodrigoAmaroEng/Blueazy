@@ -74,7 +74,7 @@ public class PairRequest {
                     mEngine.notifyError(mMacAddress);
                     return false;
                 } else if (ACTION_PAIRING_ON_PROGRESS.equals(pairEvent.getEvent())) {
-                    operation.get().incrementBy(10);
+                    operation.get().resetTime();
                     mReceivedPairingRequest = true;
                 }
                 return true;
