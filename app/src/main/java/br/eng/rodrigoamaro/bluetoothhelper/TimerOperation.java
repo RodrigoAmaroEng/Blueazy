@@ -9,6 +9,7 @@ public class TimerOperation extends TimerTask {
     private OnTimeoutListener mListener;
     private int mElapsed = 0;
     private TimerTask mTask;
+    private final Object mLock = new Object();
 
     TimerOperation(final int duration, final OnTimeoutListener listener) {
         mDuration = duration;
@@ -17,16 +18,26 @@ public class TimerOperation extends TimerTask {
 
     @Override
     public void run() {
-//        Log.d(TAG, "Timer Elapsed: " + mElapsed);
-        if (++mElapsed >= mDuration) {
-            cancel();
-            mListener.onTimeout();
-            mTask = null;
-            mListener = null;
+        synchronized (mLock) {
+            mElapsed++;
+            if (mElapsed >= mDuration) {
+                cancel();
+                mListener.onTimeout();
+                mTask = null;
+                mListener = null;
+            }
         }
     }
 
     public void incrementBy(int seconds) {
-        mDuration += seconds;
+        synchronized (mLock) {
+            mDuration += seconds;
+        }
+    }
+
+    public void resetTime() {
+        synchronized (mLock) {
+            mElapsed = 0;
+        }
     }
 }

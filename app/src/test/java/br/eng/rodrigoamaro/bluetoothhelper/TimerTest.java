@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
@@ -65,6 +66,29 @@ public class TimerTest {
             // Garante que não foi chamado antes
         }
         verify(mListener, timeout(2200)).onTimeout();
+    }
+
+    @Test
+    public void resetTimerCounter() throws Exception {
+        Timer timer = new Timer();
+        long millis = System.currentTimeMillis();
+        final CountDownLatch latch = new CountDownLatch(1);
+        TimerOperation operation = timer.countForSeconds(2, new OnTimeoutListener() {
+            @Override
+            public void onTimeout() {
+                latch.countDown();
+            }
+        });
+        try {
+            verify(mListener, timeout(1200)).onTimeout();
+            fail();
+        } catch (Throwable e) {
+            // Garante que não foi chamado antes
+        }
+        operation.resetTime();
+        latch.await();
+        long now = System.currentTimeMillis();
+        assertTrue((now - millis) > 2500);
     }
 
     @Test
