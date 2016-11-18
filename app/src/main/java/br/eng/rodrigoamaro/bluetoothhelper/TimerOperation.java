@@ -4,6 +4,7 @@ package br.eng.rodrigoamaro.bluetoothhelper;
 import java.util.TimerTask;
 
 public class TimerOperation extends TimerTask {
+    private static final String TAG = "TimerOperation";
     private int mDuration;
     private OnTimeoutListener mListener;
     private int mElapsed = 0;
@@ -16,7 +17,8 @@ public class TimerOperation extends TimerTask {
 
     @Override
     public void run() {
-        if (++mElapsed == mDuration) {
+//        Log.d(TAG, "Timer Elapsed: " + mElapsed);
+        if (++mElapsed >= mDuration) {
             cancel();
             mListener.onTimeout();
             mTask = null;

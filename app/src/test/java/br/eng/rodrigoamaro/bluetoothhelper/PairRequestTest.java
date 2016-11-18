@@ -75,9 +75,10 @@ public class PairRequestTest {
     public void sendTimeoutMessageWhenTimerTimeout() throws Exception {
         PairRequest request = new PairRequest(MAC_ADDRESS_1, mock(ContextProvider.class));
         TestSubscriber<BluetoothDevice> subscriber = new TestSubscriber<>();
-        setLongWaitToDeliverMessage();
+        setLongWaitToDeliverMessage(mDevice);
         setTimerEndImmediately();
         request.perform().subscribe(subscriber);
+        subscriber.awaitTerminalEvent();
         verify(mPairEngine).notifyTimeout(eq(MAC_ADDRESS_1));
     }
 
@@ -115,7 +116,16 @@ public class PairRequestTest {
         setPairNotDoneAfterRequest(mDevice);
         TestSubscriber<BluetoothDevice> subscriber = new TestSubscriber<>();
         request.perform().subscribe(subscriber);
-        verify(mOperation).incrementBy(eq(5));
+        verify(mOperation).incrementBy(eq(10));
+    }
+
+    @Test
+    public void doNotStartTimerBeforeReceiveStartEvent() {
+        PairRequest request = new PairRequest(MAC_ADDRESS_1, mock(ContextProvider.class));
+        TestSubscriber<BluetoothDevice> subscriber = new TestSubscriber<>();
+        setNoStartMessage();
+        request.perform().subscribe(subscriber);
+        verify(mTimer, never()).countForSeconds(anyInt(), any(OnTimeoutListener.class));
     }
 
     private void setTimerEndImmediately() {
@@ -135,13 +145,18 @@ public class PairRequestTest {
         doReturn(Observable.just(new PairEvent(PairApi.ACTION_PAIRING_SUCCEEDED, device)))
                 .when(mPairEngine).pair(anyString());
     }
+    private void setNoStartMessage() {
+        doReturn(Observable.empty()).when(mPairEngine).pair(anyString());
+    }
 
-    private void setLongWaitToDeliverMessage() {
-        doReturn(Observable.empty().delay(500, TimeUnit.MILLISECONDS)).when(mPairEngine).pair(anyString());
+    private void setLongWaitToDeliverMessage(BluetoothDevice device) {
+        doReturn(Observable.just(new PairEvent(PairApi.ACTION_PAIRING_STARTED, device))
+                .delay(500, TimeUnit.MILLISECONDS)).when(mPairEngine).pair(anyString());
     }
 
     private void setPairNotDoneBeforeRequest(BluetoothDevice device) {
         doReturn(Observable.just(
+                new PairEvent(PairApi.ACTION_PAIRING_STARTED, device),
                 new PairEvent(PairApi.ACTION_PAIRING_NOT_DONE, device),
                 new PairEvent(PairApi.ACTION_PAIRING_ON_PROGRESS, device)
         )).when(mPairEngine).pair(anyString());
@@ -149,6 +164,7 @@ public class PairRequestTest {
 
     private void setPairNotDoneAfterRequest(BluetoothDevice device) {
         doReturn(Observable.just(
+                new PairEvent(PairApi.ACTION_PAIRING_STARTED, device),
                 new PairEvent(PairApi.ACTION_PAIRING_ON_PROGRESS, device),
                 new PairEvent(PairApi.ACTION_PAIRING_NOT_DONE, device)
         )).when(mPairEngine).pair(anyString());

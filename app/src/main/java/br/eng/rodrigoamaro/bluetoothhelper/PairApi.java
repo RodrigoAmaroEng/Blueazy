@@ -22,7 +22,7 @@ public class PairApi extends BluetoothApi {
     private static final String TAG = "PairApi";
     public static final String ACTION_FAKE_PAIR_REQUEST = "android.bluetooth.device.action.PAIRING_REQUEST";
     public static final String ACTION_PAIRING_SUCCEEDED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_SUCCEEDED";
-    public static final String ACTION_PAIRING_STARTED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_SUCCEEDED";
+    public static final String ACTION_PAIRING_STARTED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_STARTED";
     public static final String ACTION_PAIRING_TIMEOUT = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_TIMEOUT";
     public static final String ACTION_PAIRING_FAILED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_FAILED";
     public static final String ACTION_PAIRING_NOT_DONE = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_NOT_DONE";
