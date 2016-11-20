@@ -2,13 +2,13 @@ package br.eng.rodrigoamaro.bluetoothhelper;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.util.Log;
 
 import rx.Observable;
 import rx.functions.Func0;
 import rx.functions.Func1;
 
+import static android.bluetooth.BluetoothAdapter.ACTION_STATE_CHANGED;
 import static android.bluetooth.BluetoothAdapter.EXTRA_STATE;
 import static android.bluetooth.BluetoothAdapter.STATE_OFF;
 import static android.bluetooth.BluetoothAdapter.STATE_ON;
@@ -24,16 +24,20 @@ public class BluetoothApi {
     }
 
     public Observable<Intent> turnBluetoothOn() {
-        IntentFilter intentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        return RxBroadcast.fromShortBroadcast(mContext.getContext(), intentFilter,
-                filterState(STATE_ON), turnOn())
+        return new RxBroadcast.Builder(mContext.getContext())
+                .addFilter(ACTION_STATE_CHANGED)
+                .setExitCondition(filterStateIs(STATE_ON))
+                .setStartOperation(turnOn())
+                .build()
                 .ignoreElements();
     }
 
     public Observable<Intent> turnBluetoothOff() {
-        IntentFilter intentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        return RxBroadcast.fromShortBroadcast(mContext.getContext(), intentFilter,
-                filterState(STATE_OFF), turnOff())
+        return new RxBroadcast.Builder(mContext.getContext())
+                .addFilter(ACTION_STATE_CHANGED)
+                .setExitCondition(filterStateIs(STATE_OFF))
+                .setStartOperation(turnOff())
+                .build()
                 .ignoreElements();
     }
 
@@ -61,11 +65,11 @@ public class BluetoothApi {
         };
     }
 
-    private Func1<Intent, Boolean> filterState(final int state) {
+    private Func1<Intent, Boolean> filterStateIs(final int state) {
         return new Func1<Intent, Boolean>() {
             @Override
             public Boolean call(Intent intent) {
-                Log.d(TAG, "filterState: " + intent.getIntExtra(EXTRA_STATE, -1));
+                Log.d(TAG, "filterStateIs: " + intent.getIntExtra(EXTRA_STATE, -1));
                 return intent.getIntExtra(EXTRA_STATE, -1) == state;
             }
         };

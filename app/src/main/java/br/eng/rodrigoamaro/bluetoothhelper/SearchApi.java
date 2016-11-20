@@ -28,11 +28,11 @@ public class SearchApi extends BluetoothApi {
 
     public Observable<SearchEvent> search() {
         mStopRequested = false;
-        IntentFilter intentFilter = new IntentFilter(ACTION_DISCOVERY_STARTED);
-        intentFilter.addAction(ACTION_DISCOVERY_FINISHED);
-        intentFilter.addAction(ACTION_FOUND);
-        return RxBroadcast.fromShortBroadcast(mContext.getContext(), intentFilter,
-                detectEndOfSearch(), startSearch())
+        return new RxBroadcast.Builder(mContext.getContext())
+                .addFilters(ACTION_DISCOVERY_STARTED, ACTION_DISCOVERY_FINISHED, ACTION_FOUND)
+                .setExitCondition(detectEndOfSearch())
+                .setStartOperation(startSearch())
+                .build()
                 .map(extractEvent())
                 .filter(RxUtils.discardNulls());
     }
