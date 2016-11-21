@@ -6,7 +6,7 @@ import dagger.Component;
 
 @Singleton
 @Component(modules = LibModule.class)
-public interface Injector {
+interface Injector {
 
     SearchEngine createNewSearchEngine();
 

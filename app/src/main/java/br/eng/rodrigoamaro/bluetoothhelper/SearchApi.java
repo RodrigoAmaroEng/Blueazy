@@ -13,20 +13,20 @@ import static android.bluetooth.BluetoothAdapter.ACTION_DISCOVERY_FINISHED;
 import static android.bluetooth.BluetoothAdapter.ACTION_DISCOVERY_STARTED;
 import static android.bluetooth.BluetoothDevice.ACTION_FOUND;
 
-public class SearchApi extends BluetoothApi {
+class SearchApi extends BluetoothApi {
 
     private boolean mStopRequested;
 
-    public SearchApi(ContextProvider context, BluetoothAdapter adapter) {
+    SearchApi(ContextProvider context, BluetoothAdapter adapter) {
         super(context, adapter);
     }
 
-    public void stop() {
+    void stop() {
         mAdapter.cancelDiscovery();
         mStopRequested = true;
     }
 
-    public Observable<SearchEvent> search() {
+    Observable<SearchEvent> search() {
         mStopRequested = false;
         return new RxBroadcast.Builder(mContext.getContext())
                 .addFilters(ACTION_DISCOVERY_STARTED, ACTION_DISCOVERY_FINISHED, ACTION_FOUND)

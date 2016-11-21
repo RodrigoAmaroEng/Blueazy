@@ -5,14 +5,14 @@ import android.content.Intent;
 import rx.Observable;
 import rx.functions.Func1;
 
-public class PairEngine {
+class PairEngine {
     private final PairApi mPairApi;
 
-    public PairEngine(PairApi pairApi) {
+    PairEngine(PairApi pairApi) {
         mPairApi = pairApi;
     }
 
-    public Observable<PairEvent> pair(String macAddress) {
+    Observable<PairEvent> pair(String macAddress) {
         Observable<Intent> observable = mPairApi.turnBluetoothOn();
         if (mPairApi.isBluetoothOn()) {
             observable = mPairApi.turnBluetoothOff().concatWith(observable);
@@ -32,11 +32,11 @@ public class PairEngine {
     }
 
 
-    public void notifyTimeout(String macAddress) {
+    void notifyTimeout(String macAddress) {
         mPairApi.sendTimeoutMessage(macAddress);
     }
 
-    public void notifyError(String macAddress) {
+    void notifyError(String macAddress) {
         mPairApi.sendErrorMessage(macAddress);
     }
 }

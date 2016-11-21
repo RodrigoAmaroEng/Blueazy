@@ -17,16 +17,16 @@ import static android.bluetooth.BluetoothDevice.BOND_NONE;
 import static android.bluetooth.BluetoothDevice.EXTRA_BOND_STATE;
 import static android.bluetooth.BluetoothDevice.EXTRA_DEVICE;
 
-public class PairApi extends BluetoothApi {
+class PairApi extends BluetoothApi {
 
     private static final String TAG = "PairApi";
-    public static final String ACTION_FAKE_PAIR_REQUEST = "android.bluetooth.device.action.PAIRING_REQUEST";
-    public static final String ACTION_PAIRING_SUCCEEDED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_SUCCEEDED";
-    public static final String ACTION_PAIRING_STARTED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_STARTED";
-    public static final String ACTION_PAIRING_TIMEOUT = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_TIMEOUT";
-    public static final String ACTION_PAIRING_FAILED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_FAILED";
-    public static final String ACTION_PAIRING_NOT_DONE = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_NOT_DONE";
-    public static final String ACTION_PAIRING_ON_PROGRESS = "android.bluetooth.device.action.PAIRING_ON_PROGRESS";
+    static final String ACTION_FAKE_PAIR_REQUEST = "android.bluetooth.device.action.PAIRING_REQUEST";
+    static final String ACTION_PAIRING_SUCCEEDED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_SUCCEEDED";
+    static final String ACTION_PAIRING_STARTED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_STARTED";
+    static final String ACTION_PAIRING_TIMEOUT = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_TIMEOUT";
+    static final String ACTION_PAIRING_FAILED = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_FAILED";
+    static final String ACTION_PAIRING_NOT_DONE = "br.eng.rodrigoamaro.bluetoothhelper.PAIRING_NOT_DONE";
+    static final String ACTION_PAIRING_ON_PROGRESS = "android.bluetooth.device.action.PAIRING_ON_PROGRESS";
     private final PairingSystem mPairingSystem;
 
     public PairApi(ContextProvider context, BluetoothAdapter adapter, PairingSystem pairingSystem) {
@@ -34,19 +34,19 @@ public class PairApi extends BluetoothApi {
         mPairingSystem = pairingSystem;
     }
 
-    public void sendTimeoutMessage(String macAddress) {
+    void sendTimeoutMessage(String macAddress) {
         Intent intent = new Intent(ACTION_PAIRING_TIMEOUT);
         intent.putExtra(EXTRA_DEVICE, mAdapter.getRemoteDevice(macAddress));
         mContext.getContext().sendBroadcast(intent);
     }
 
-    public void sendErrorMessage(String macAddress) {
+    void sendErrorMessage(String macAddress) {
         Intent intent = new Intent(ACTION_PAIRING_FAILED);
         intent.putExtra(EXTRA_DEVICE, mAdapter.getRemoteDevice(macAddress));
         mContext.getContext().sendBroadcast(intent);
     }
 
-    public Observable<PairEvent> pair(String macAddress) {
+    Observable<PairEvent> pair(String macAddress) {
         return new RxBroadcast.Builder(mContext.getContext())
                 .addFilters(ACTION_BOND_STATE_CHANGED, ACTION_ACL_CONNECTED, ACTION_ACL_DISCONNECTED
                         , ACTION_FAKE_PAIR_REQUEST, ACTION_PAIRING_FAILED, ACTION_PAIRING_TIMEOUT)
@@ -58,19 +58,6 @@ public class PairApi extends BluetoothApi {
                 .flatMap(detectError())
                 .map(extractEvent())
                 .filter(RxUtils.discardNulls());
-//        IntentFilter intentFilter = new IntentFilter(ACTION_BOND_STATE_CHANGED);
-//        intentFilter.addAction(ACTION_ACL_CONNECTED);
-//        intentFilter.addAction(ACTION_ACL_DISCONNECTED);
-//        intentFilter.addAction(ACTION_FAKE_PAIR_REQUEST);
-//        intentFilter.addAction(ACTION_PAIRING_FAILED);
-//        intentFilter.addAction(ACTION_PAIRING_TIMEOUT);
-//        return RxBroadcast.fromShortBroadcastInclusive(mContext.getContext(), intentFilter,
-//                detectPairCompleted(macAddress), startPairProcess(macAddress))
-//                .filter(onlyEventsForThisDevice(macAddress))
-//                .flatMap(detectError())
-//                .map(extractEvent())
-//                .filter(RxUtils.discardNulls());
-
     }
 
     private Func0<Observable<Intent>> startPairProcess(final String macAddress) {
@@ -86,16 +73,13 @@ public class PairApi extends BluetoothApi {
                         Intent intent = new Intent(ACTION_BOND_STATE_CHANGED);
                         intent.putExtra(EXTRA_DEVICE, device);
                         intent.putExtra(EXTRA_BOND_STATE, BOND_BONDED);
-                        Log.d(TAG, "Returning paired device");
                         return Observable.just(intent);
                     }
-                    Log.d(TAG, "Start pair");
                     mPairingSystem.pair(device);
                     Intent intent = new Intent(ACTION_PAIRING_STARTED);
                     intent.putExtra(EXTRA_DEVICE, device);
                     return Observable.just(intent);
                 } catch (DevicePairingFailed devicePairingFailed) {
-                    Log.d(TAG, "Error on pair");
                     return Observable.error(devicePairingFailed);
                 }
             }

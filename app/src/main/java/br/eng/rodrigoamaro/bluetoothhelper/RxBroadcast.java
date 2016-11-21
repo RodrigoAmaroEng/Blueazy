@@ -87,13 +87,11 @@ public class RxBroadcast implements Observable.OnSubscribe<Intent> {
 
         };
         if (hasStartingOperation()) {
-            Log.d(TAG, "hasStartingOperation");
             mStartOperation.call()
                     .subscribe(redirectItemTo(subscriber, receiver),
                             redirectErrorTo(subscriber),
                             registerIfNotCompleted(subscriber, receiver));
         } else {
-            Log.d(TAG, "doNotHaveStartingOperation");
             registerReceiver(subscriber, receiver);
         }
     }
@@ -112,7 +110,6 @@ public class RxBroadcast implements Observable.OnSubscribe<Intent> {
 
     private void evaluate(Intent intent, Subscriber<? super Intent> subscriber,
                           BroadcastReceiver receiver) {
-        Log.d(TAG, "Evaluating: " + intent);
         if (hasCondition()) {
             Boolean isCompleted = mExitCondition.call(intent);
             if (hasToIncludeExitConditionEvent()) {
@@ -145,17 +142,13 @@ public class RxBroadcast implements Observable.OnSubscribe<Intent> {
         return new Action1<Intent>() {
             @Override
             public void call(Intent item) {
-                Log.d(TAG, "Propagation of items");
                 if (!hasCondition() || !mExitCondition.call(item)) {
-                    Log.d(TAG, "Propagating and registering");
                     subscriber.onNext(item);
                     registerReceiver(subscriber, receiver);
                 } else {
                     if (hasToIncludeExitConditionEvent()) {
-                        Log.d(TAG, "Propagating");
                         subscriber.onNext(item);
                     }
-                    Log.d(TAG, "Completed");
                     mCompleted = true;
                     subscriber.onCompleted();
                 }
@@ -167,7 +160,6 @@ public class RxBroadcast implements Observable.OnSubscribe<Intent> {
         return new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
-                Log.d(TAG, "Propagating error");
                 mCompleted = true;
                 subscriber.onError(throwable);
             }

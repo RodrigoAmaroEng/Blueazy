@@ -3,11 +3,11 @@ package br.eng.rodrigoamaro.bluetoothhelper;
 
 import android.bluetooth.BluetoothDevice;
 
-public class PairEvent {
+class PairEvent {
     private final String mEvent;
     private final BluetoothDevice mDevice;
 
-    public PairEvent(String event, BluetoothDevice device) {
+    PairEvent(String event, BluetoothDevice device) {
         mEvent = event;
         mDevice = device;
     }
@@ -31,11 +31,7 @@ public class PairEvent {
 
         PairEvent pairEvent = (PairEvent) o;
 
-        if (!mEvent.equals(pairEvent.mEvent)) {
-            return false;
-        }
-        return mDevice.equals(pairEvent.mDevice);
-
+        return mEvent.equals(pairEvent.mEvent) && mDevice.equals(pairEvent.mDevice);
     }
 
     @Override

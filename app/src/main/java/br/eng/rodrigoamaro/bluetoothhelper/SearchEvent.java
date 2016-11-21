@@ -4,20 +4,20 @@ import android.bluetooth.BluetoothDevice;
 
 import static android.bluetooth.BluetoothAdapter.ACTION_DISCOVERY_STARTED;
 
-public class SearchEvent {
+class SearchEvent {
 
     private final String mEventType;
     private final Device mDevice;
 
-    public SearchEvent() {
+    SearchEvent() {
         this(ACTION_DISCOVERY_STARTED);
     }
 
-    public SearchEvent(String eventType) {
+    private SearchEvent(String eventType) {
         this(eventType, null);
     }
 
-    public SearchEvent(Device device) {
+    SearchEvent(Device device) {
         this(BluetoothDevice.ACTION_FOUND, device);
     }
 
@@ -26,7 +26,7 @@ public class SearchEvent {
         mDevice = device;
     }
 
-    public String getEventType() {
+    String getEventType() {
         return mEventType;
     }
 
@@ -45,10 +45,8 @@ public class SearchEvent {
 
         SearchEvent that = (SearchEvent) o;
 
-        if (!mEventType.equals(that.mEventType)) {
-            return false;
-        }
-        return mDevice != null ? mDevice.equals(that.mDevice) : that.mDevice == null;
+        return mEventType.equals(that.mEventType) &&
+                (mDevice != null ? mDevice.equals(that.mDevice) : that.mDevice == null);
 
     }
 

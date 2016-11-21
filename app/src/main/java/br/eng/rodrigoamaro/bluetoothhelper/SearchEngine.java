@@ -5,15 +5,15 @@ import android.content.Intent;
 import rx.Observable;
 import rx.functions.Func1;
 
-public class SearchEngine {
+class SearchEngine {
 
     private final SearchApi mSearchApi;
 
-    public SearchEngine(SearchApi searchApi) {
+    SearchEngine(SearchApi searchApi) {
         mSearchApi = searchApi;
     }
 
-    public Observable<SearchEvent> search() {
+    Observable<SearchEvent> search() {
         if (!mSearchApi.isBluetoothOn()) {
             return mSearchApi.turnBluetoothOn()
                     .map(toSearchEvent())
@@ -40,7 +40,7 @@ public class SearchEngine {
         };
     }
 
-    public void stop() {
+    void stop() {
         mSearchApi.stop();
     }
 

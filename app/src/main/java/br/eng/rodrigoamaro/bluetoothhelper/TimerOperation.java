@@ -3,12 +3,11 @@ package br.eng.rodrigoamaro.bluetoothhelper;
 
 import java.util.TimerTask;
 
-public class TimerOperation extends TimerTask {
+class TimerOperation extends TimerTask {
     private static final String TAG = "TimerOperation";
     private int mDuration;
     private OnTimeoutListener mListener;
     private int mElapsed = 0;
-    private TimerTask mTask;
     private final Object mLock = new Object();
 
     TimerOperation(final int duration, final OnTimeoutListener listener) {
@@ -23,19 +22,18 @@ public class TimerOperation extends TimerTask {
             if (mElapsed >= mDuration) {
                 cancel();
                 mListener.onTimeout();
-                mTask = null;
                 mListener = null;
             }
         }
     }
 
-    public void incrementBy(int seconds) {
+    void incrementBy(int seconds) {
         synchronized (mLock) {
             mDuration += seconds;
         }
     }
 
-    public void resetTime() {
+    void resetTime() {
         synchronized (mLock) {
             mElapsed = 0;
         }

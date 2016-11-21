@@ -13,17 +13,17 @@ import static android.bluetooth.BluetoothAdapter.EXTRA_STATE;
 import static android.bluetooth.BluetoothAdapter.STATE_OFF;
 import static android.bluetooth.BluetoothAdapter.STATE_ON;
 
-public class BluetoothApi {
+class BluetoothApi {
     private static final String TAG = "BluetoothApi";
     protected final ContextProvider mContext;
     protected final BluetoothAdapter mAdapter;
 
-    public BluetoothApi(ContextProvider context, BluetoothAdapter adapter) {
+    BluetoothApi(ContextProvider context, BluetoothAdapter adapter) {
         mAdapter = adapter;
         mContext = context;
     }
 
-    public Observable<Intent> turnBluetoothOn() {
+    Observable<Intent> turnBluetoothOn() {
         return new RxBroadcast.Builder(mContext.getContext())
                 .addFilter(ACTION_STATE_CHANGED)
                 .setExitCondition(filterStateIs(STATE_ON))
@@ -32,7 +32,7 @@ public class BluetoothApi {
                 .ignoreElements();
     }
 
-    public Observable<Intent> turnBluetoothOff() {
+    Observable<Intent> turnBluetoothOff() {
         return new RxBroadcast.Builder(mContext.getContext())
                 .addFilter(ACTION_STATE_CHANGED)
                 .setExitCondition(filterStateIs(STATE_OFF))
@@ -41,7 +41,7 @@ public class BluetoothApi {
                 .ignoreElements();
     }
 
-    public boolean isBluetoothOn() {
+    boolean isBluetoothOn() {
         return mAdapter.isEnabled();
     }
 
