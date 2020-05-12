@@ -1,4 +1,4 @@
-<manifest package="br.eng.rodrigoamaro.bluetoothhelper"
+<manifest package="dev.amaro.bluetoothhelper"
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools">
 

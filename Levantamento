@@ -45,23 +45,23 @@ Id: 00000001-0000-1000-8000-00805f9b34fb
 Pediu pra parear e não informou o pin
 01-01 00:21:35.400 3453-3479 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
 01-01 00:21:35.405 3453-3479 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:436)
-01-01 00:21:35.405 3453-3479 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:51)
-01-01 00:21:35.406 3453-3479 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:25)
-01-01 00:21:35.406 3453-3479 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairApi.pair(PairApi.java:42)
+01-01 00:21:35.405 3453-3479 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:51)
+01-01 00:21:35.406 3453-3479 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:25)
+01-01 00:21:35.406 3453-3479 System.err:     at dev.amaro.bluetoothhelper.PairApi.pair(PairApi.java:42)
 
 Pediu pra parear e cancelou
 01-01 00:25:15.436 3864-3878 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
 01-01 00:25:15.437 3864-3878 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:436)
-01-01 00:25:15.438 3864-3878 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:51)
-01-01 00:25:15.438 3864-3878 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:25)
-01-01 00:25:15.439 3864-3878 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairApi.pair(PairApi.java:42)
+01-01 00:25:15.438 3864-3878 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:51)
+01-01 00:25:15.438 3864-3878 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:25)
+01-01 00:25:15.439 3864-3878 System.err:     at dev.amaro.bluetoothhelper.PairApi.pair(PairApi.java:42)
 
 Pediu pra parear e informou o pin errado
 01-01 00:26:54.986 3989-4003 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
 01-01 00:26:54.997 3989-4003 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:436)
-01-01 00:26:54.998 3989-4003 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:51)
-01-01 00:26:55.000 3989-4003 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:25)
-01-01 00:26:55.002 3989-4003 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairApi.pair(PairApi.java:42)
+01-01 00:26:54.998 3989-4003 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:51)
+01-01 00:26:55.000 3989-4003 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:25)
+01-01 00:26:55.002 3989-4003 System.err:     at dev.amaro.bluetoothhelper.PairApi.pair(PairApi.java:42)
 
 Pediu pra parear e informou o pin certo
 NÃO MOSTROU NADA MAS APARENTEMENTE DEU SUCESSO
@@ -108,28 +108,28 @@ Pediu pra parear e não informou o pin (Mostrou a dialog)
 11-09 14:31:26.958 12997-13011 System.err: java.io.IOException: Service discovery failed
 11-09 14:31:26.962 12997-13011 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:990)
 11-09 14:31:26.964 12997-13011 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:423)
-11-09 14:31:26.964 12997-13011 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:31:26.964 12997-13011 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
 11-09 14:31:50.934 12997-12997 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
 
 Pediu pra parear e cancelou
 11-09 14:34:56.423 13073-13087 System.err: java.io.IOException: Service discovery failed
 11-09 14:34:56.424 13073-13087 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:990)
 11-09 14:34:56.424 13073-13087 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:423)
-11-09 14:34:56.424 13073-13087 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:34:56.424 13073-13087 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
 11-09 14:34:57.014 13073-13073 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
 
 Pediu pra parear e informou o pin errado
 11-09 14:36:55.500 13153-13167 System.err: java.io.IOException: Service discovery failed
 11-09 14:36:55.502 13153-13167 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:990)
 11-09 14:36:55.502 13153-13167 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:423)
-11-09 14:36:55.502 13153-13167 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:36:55.502 13153-13167 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
 11-09 14:41:11.963 13242-13242 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB (2nd Try)
 
 Pediu pra parear e informou o pin certo (Não deu certo)
 11-09 14:42:08.854 13321-13335 System.err: java.io.IOException: Service discovery failed
 11-09 14:42:08.856 13321-13335 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:990)
 11-09 14:42:08.857 13321-13335 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:423)
-11-09 14:42:08.857 13321-13335 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:42:08.857 13321-13335 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
 11-09 14:42:13.157 13321-13321 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
 11-09 14:42:14.096 13321-13321 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB
 11-09 14:42:14.099 13321-13321 PairApi: Id: 00001101-0000-1000-8000-00805f9b34fb
@@ -183,14 +183,14 @@ Id: 00001101-0000-1000-8000-00805f9b34fb
 Pediu pra parear e não informou o pin (Mostrou a dialog e sumiu rapidamente)
 11-09 14:57:42.740 14442-14456 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
 11-09 14:57:42.752 14442-14456 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:436)
-11-09 14:57:42.752 14442-14456 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
-11-09 14:57:42.752 14442-14456 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:26)
+11-09 14:57:42.752 14442-14456 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:57:42.752 14442-14456 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:26)
 
 Pediu pra parear e cancelou
 11-09 14:59:45.246 14507-14521 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
 11-09 14:59:45.248 14507-14521 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:436)
-11-09 14:59:45.248 14507-14521 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
-11-09 14:59:45.249 14507-14521 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:26)
+11-09 14:59:45.248 14507-14521 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:59:45.249 14507-14521 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pair(PairingSystem.java:26)
 
 Pediu pra parear e informou o pin errado
 NÃO FOI POSSIVEL PORQUE A TELA SOME
@@ -202,7 +202,7 @@ Pediu pra parear um leitor já pareado
 11-09 14:53:55.954 14119-14146 System.err: java.io.IOException: Service discovery failed
 11-09 14:53:55.959 14119-14146 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:990)
 11-09 14:53:55.959 14119-14146 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:423)
-11-09 14:53:55.959 14119-14146 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:53:55.959 14119-14146 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
 
 ##############################################################################################################################
 
@@ -250,12 +250,12 @@ DeviceClass: 7936 - 7936
 Pediu pra parear e não informou o pin (Mostrou a dialog e sumiu rapidamente)
 11-09 15:23:28.024 7762-7775 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
 11-09 15:23:28.025 7762-7775 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:395)
-11-09 15:23:28.026 7762-7775 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 15:23:28.026 7762-7775 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
 
 Pediu pra parear e cancelou
 11-09 15:25:38.936 7957-7970 System.err: java.io.IOException: [JSR82] connect: Connection is not created (failed or aborted).
 11-09 15:25:38.937 7957-7970 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:395)
-11-09 15:25:38.937 7957-7970 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 15:25:38.937 7957-7970 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
 
 Pediu pra parear e informou o pin errado
 NÃO FOI POSSIVEL PORQUE A TELA SOME
@@ -267,7 +267,7 @@ Pediu pra parear um leitor já pareado
 11-09 14:53:55.954 14119-14146 System.err: java.io.IOException: Service discovery failed
 11-09 14:53:55.959 14119-14146 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:990)
 11-09 14:53:55.959 14119-14146 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:423)
-11-09 14:53:55.959 14119-14146 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 14:53:55.959 14119-14146 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
 
 ##############################################################################################################################
 
@@ -309,28 +309,28 @@ Pediu pra parear e não informou o pin
 11-09 15:37:24.012 8804-8817 System.err: java.io.IOException: Service discovery failed
 11-09 15:37:24.013 8804-8817 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:813)
 11-09 15:37:24.013 8804-8817 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:382)
-11-09 15:37:24.013 8804-8817 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 15:37:24.013 8804-8817 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
 11-09 15:37:46.705 8804-8804 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB 
 
 Pediu pra parear e cancelou
 11-09 15:38:50.106 8891-8904 System.err: java.io.IOException: Service discovery failed
 11-09 15:38:50.107 8891-8904 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:813)
 11-09 15:38:50.107 8891-8904 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:382)
-11-09 15:38:50.107 8891-8904 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 15:38:50.107 8891-8904 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
 11-09 15:38:54.108 8891-8891 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB
 
 Pediu pra parear e informou o pin errado
 11-09 15:42:50.138 9013-9026 System.err: java.io.IOException: Service discovery failed
 11-09 15:42:50.139 9013-9026 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:813)
 11-09 15:42:50.140 9013-9026 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:382)
-11-09 15:42:50.140 9013-9026 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 15:42:50.140 9013-9026 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
 11-09 15:42:54.587 9013-9013 PairApi: Bond State: 10 MacAddress: 00:07:80:7A:C6:CB
 
 Pediu pra parear e informou o pin certo (Não deu certo)
 11-09 15:44:12.811 9106-9119 System.err: java.io.IOException: Service discovery failed
 11-09 15:44:12.814 9106-9119 System.err:     at android.bluetooth.BluetoothSocket$SdpHelper.doSdp(BluetoothSocket.java:813)
 11-09 15:44:12.814 9106-9119 System.err:     at android.bluetooth.BluetoothSocket.connect(BluetoothSocket.java:382)
-11-09 15:44:12.814 9106-9119 System.err:     at br.eng.rodrigoamaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
+11-09 15:44:12.814 9106-9119 System.err:     at dev.amaro.bluetoothhelper.PairingSystem.pairRfComm(PairingSystem.java:52)
 11-09 15:44:19.999 9106-9106 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
 11-09 15:44:20.848 9106-9106 PairApi: Bond State: -1 MacAddress: 00:07:80:7A:C6:CB 
 
