@@ -18,6 +18,6 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Gradle
-      run: ./gradlew build testDebugUnitTest
+      run: ./gradlew assembleDebug testDebugUnitTest
     - name: Android Test Report Action
       uses: asadmansr/android-test-report-action@v1.2.0
