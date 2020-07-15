@@ -25,14 +25,15 @@ properties.load(project.rootProject.file("local.properties").newDataInputStream(
 
 publishing {
     repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/RodrigoAmaroEng/Blueazy")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME") ?: properties.getProperty("gpr.user")
-                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN") ?: properties.getProperty("gpr.key")
-            }
-        }
+        mavenLocal()
+        // maven {
+        //     name = "GitHubPackages"
+        //     url = uri("https://maven.pkg.github.com/RodrigoAmaroEng/Blueazy")
+        //     credentials {
+        //         username = project.findProperty("gpr.user") ?: System.getenv("USERNAME") ?: properties.getProperty("gpr.user")
+        //         password = project.findProperty("gpr.key") ?: System.getenv("TOKEN") ?: properties.getProperty("gpr.key")
+        //     }
+        // }
     }
     project.afterEvaluate {
         publications {
