@@ -22,16 +22,6 @@ def pomConfig = {
 }
 
 publishing {
-    repositories {
-        maven {
-            name = project.findProperty("git.bucket")
-            url = uri("https://maven.pkg.github.com/${project.findProperty("dev.id")}/${project.findProperty("git.bucket")}")
-            credentials {
-                username = project.findProperty("github.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("github.key") ?: System.getenv("TOKEN")
-            }
-        }
-    }
     project.afterEvaluate {
         publications {
             mavenJava(MavenPublication) {
@@ -60,6 +50,25 @@ publishing {
     }
 }
 
+gradle.afterProject { graph ->
+    publishing {
+        repositories {
+            if (project.gradle.startParameter.taskNames.contains("publishLocal")) {
+                mavenLocal()
+            } else {
+                maven {
+                    name = project.findProperty("git.bucket") ?:""
+                    url = uri("https://maven.pkg.github.com/${project.findProperty("dev.id")}/${project.findProperty("git.bucket")}")
+                    credentials {
+                        username = project.findProperty("github.user") ?: System.getenv("USERNAME") ?:""
+                        password = project.findProperty("github.key") ?: System.getenv("TOKEN")?: ""
+                    }
+                }
+            }
+        }
+    }
+}
+
 def dependenciesToBePackaged() {
     return configurations.all
             .findAll {
@@ -71,3 +80,6 @@ def dependenciesToBePackaged() {
             .findAll { it.version }
             .unique(false)
 }
+
+task publishLocal
+publishLocal.dependsOn 'publish'
